@@ -14,4 +14,12 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <!--Strings for the UI section-->
+
+    <string name="patient_heading">Patient Details</string>
+    <string name="button_save">Save</string>
+    <string name="button_print">Print</string>
+
+
 </resources>

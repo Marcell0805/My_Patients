@@ -23,6 +23,9 @@ import android.view.Menu;
 
 public class PatientsUiNav extends AppCompatActivity {
 
+    //data binding
+    //
+
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
