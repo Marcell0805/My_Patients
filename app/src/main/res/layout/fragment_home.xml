@@ -1,56 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="Patient"
             type="com.example.mypatients.models.Patient" />
     </data>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/headingView"
-            android:layout_height="45dp"
-            android:layout_width="fill_parent"
-            android:background="@color/Headings"
-            android:text="@string/patient_heading"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
+    <ScrollView
+        android:id="@+id/scrollLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/innerLayout">
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/headingView"
+                android:layout_height="@dimen/headingMain"
+                android:layout_width="fill_parent"
+                android:background="@color/Headings"
+                android:text="@string/patient_heading"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/headMainTxtSize"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/roomNoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="6"
+                    android:layout_weight="1"
+                    android:layout_gravity="start"
+                    android:inputType="textPersonName"
+                    android:hint="@string/roomNoTxt"
+                    android:nextFocusRight="@id/nowDate"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_weight="15"
+                    android:layout_height="match_parent"></Space>
+                <EditText
+                    android:id="@+id/nowDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="6"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:inputType="textPersonName"
+                    android:hint="Today's Date"
+                    android:nextFocusDown="@id/nameText"/>
+
+            </LinearLayout>
 
 
-            <EditText
-                android:id="@+id/nameText"
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/innerLayout">
+            </LinearLayout>
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:focusableInTouchMode="false"
+                android:id="@+id/Relative">
+                <EditText
+                    android:id="@+id/nameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="9"
+                    android:inputType="textPersonName"
+                    android:hint="@string/pName"
+                    android:nextFocusRight="@id/surnameText"/>
+                <!--android:text="@{Patients.setPatientName()??Name}"-->
+                <EditText
+                    android:id="@+id/surnameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pSurname"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:layout_alignParentRight="true"
+                    android:nextFocusDown="@id/dateBirthText"/>
+                <EditText
+                    android:id="@+id/dateBirthText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="9"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/nameText"
+                    android:hint="@string/dobText"
+                    android:inputType="date"
+                    android:nextFocusRight="@id/ageText"/>
+                <EditText
+                    android:id="@+id/ageText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/surnameText"
+                    android:hint="@string/age"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:layout_alignParentRight="true"
+                    android:nextFocusDown="@id/doctorName"/>
 
-                android:text='@{Patient.getPatientName()??"Name"}'
-            />
-            <!--android:text="@{Patients.setPatientName()??Name}"-->
-            <EditText
-                android:id="@+id/surnameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Surname" />
+                <Space
+                    android:id="@+id/patientSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@+id/ageText"
+                    android:background="@color/Headings"/>
+
+                <EditText
+                    android:id="@+id/doctorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="9"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/patientSpace"
+                    android:inputType="textPersonName"
+                    android:nextFocusRight="@id/doctorSurname"
+                    android:hint="@string/doctorName" />
+
+                <EditText
+                    android:id="@+id/doctorSurname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/patientSpace"
+                    android:inputType="textPersonName"
+                    android:hint="@string/doctorSName"
+                    android:nextFocusDown="@id/dietText"/>
+
+                <EditText
+                    android:id="@+id/dietText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:ems="10"
+                    android:layout_below="@+id/doctorSurname"
+                    android:inputType="textPersonName"
+                    android:hint="@string/dietTxt"
+                    android:nextFocusDown="@id/ccText"/>
+
+                <EditText
+                    android:id="@+id/ccText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:layout_below="@+id/dietText"
+                    android:text='@{Patient.getCC()}'
+                    android:hint="@string/ccTxt"
+                    android:nextFocusDown="@id/hasIvfRadio"/>
+
+                <Space
+                    android:id="@+id/radioSpaceTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@+id/ccText"
+                    android:background="@color/Headings" />
+
+                <TextView
+                    android:id="@+id/RadioTextView"
+                    android:layout_below="@+id/radioSpaceTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/subHead"
+                    android:textSize="@dimen/subHeadTxtSize"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:background="@color/Headings"
+                    android:text="Select the relative:" />
+
+                <RadioGroup
+                    android:id="@+id/ivfGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/RadioTextView"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/hasIvfRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="With IVF" />
+
+                    <RadioButton
+                        android:id="@+id/noIvfRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Without IVF" />
+
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/sqOqGroup"
+                    android:layout_below="@+id/ivfGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/vsqRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Vsq" />
+
+                    <RadioButton
+                        android:id="@+id/noVsqRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text='I &amp; Oq  ' />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:layout_below="@+id/sqOqGroup"
+                    android:id="@+id/NebGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/nedRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="With Neb" />
+
+                    <RadioButton
+                        android:id="@+id/NoNebRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Without Neb" />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/medicationGroup"
+                    android:layout_below="@+id/NebGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/medicationRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="With Medication" />
+
+                    <RadioButton
+                        android:id="@+id/noMedicationRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Without Medication" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_below="@id/medicationGroup"
+                    android:id="@+id/genTableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_weight="4"/>
+                    <Button
+                        android:background="@color/MainBtnColor"
+                        android:id="@+id/tableBtn"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/tableGenBtn" />
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSpace"></Space>
+                    <Button
+                        android:background="@color/MainBtnColor"
+                        android:id="@+id/ivfCalcBtn"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/calcIvfBtn" />
+                </LinearLayout>
+                <Space
+                    android:id="@+id/separatorTable"
+                    android:layout_below="@id/genTableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"></Space>
+
+                <TableLayout
+                    android:layout_below="@id/separatorTable"
+                    android:orientation="horizontal"
+                    android:id="@+id/timeTableLayout"
+                    android:background="@color/tableColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+                        <TextView android:text="Time" android:layout_weight="1"
+                            android:background="#FFFFA2A2" android:textStyle="bold"/>
+                        <TextView android:text="PR" android:layout_weight="1"
+                            android:background="#FFFFA2A2" android:textStyle="bold"/>
+                        <TextView android:text="Temp" android:layout_weight="1"
+                            android:background="#FFFFA2A2" android:textStyle="bold"/>
+                        <TextView android:text="BP" android:layout_weight="1"
+                            android:background="#FFFFA2A2" android:textStyle="bold"/>
+                        <TextView android:text="IVF" android:layout_weight="1"
+                            android:background="#FFFFA2A2" android:textStyle="bold"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+
+                </TableLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/genTableView"
+                    android:id="@+id/spaceAfterGen">
+                </Space>
+
+                <EditText
+                    android:id="@+id/intakeTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_below="@id/spaceAfterGen"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:inputType="textPersonName"
+                    android:hint="@string/intakeTxt" />
+
+                <EditText
+                    android:id="@+id/outTakeTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spaceAfterGen"
+                    android:ems="9"
+                    android:inputType="textPersonName"
+                    android:layout_alignParentRight="true"
+                    android:hint="@string/outtakeTxt" />
+                <EditText
+                    android:id="@+id/urineTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_below="@+id/outTakeTxt"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="@string/urineTxt" />
+
+                <EditText
+                    android:id="@+id/stoolTxt"
+                    android:layout_below="@+id/outTakeTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="9"
+                    android:inputType="textPersonName"
+                    android:hint="@string/stoolTxt"
+                    android:layout_alignParentRight="true"/>
+
+                <Button
+                    android:id="@+id/printBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/printBtnTxt"
+                    android:layout_centerInParent="true"
+                    android:background="@color/MainBtnColor"
+                    android:layout_below="@id/stoolTxt"/>
+
+
+            </RelativeLayout>
+
+
         </LinearLayout>
+    </ScrollView>
 
 
-
-    </LinearLayout>
 
 
 </layout>

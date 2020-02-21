@@ -15,11 +15,28 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
-    <!--Strings for the UI section-->
+    <!--Strings for the Patient UI section-->
 
     <string name="patient_heading">Patient Details</string>
-    <string name="button_save">Save</string>
-    <string name="button_print">Print</string>
+    <string name="roomNoTxt">Room Number</string>
+    <string name="pName">Patient Name</string>
+    <string name="pSurname">Patient Surname</string>
+    <string name="dobText">Date of Birth</string>
+    <string name="age">Age</string>
+    <string name="doctorName">Doctor Name</string>
+    <string name="doctorSName">Doctor Surname</string>
+    <string name="dietTxt">Diet</string>
+    <string name="ccTxt">CC : </string>
+    <string name="tableGenBtn">Update Table</string>
+    <string name="intakeTxt">Intake</string>
+    <string name="outtakeTxt">Outtake</string>
+    <string name="urineTxt">Urine</string>
+    <string name="stoolTxt">Stool</string>
+    <string name="printBtnTxt">Print</string>
+    <string name="emailBtnTxt">Email</string>
+    <string name="calcIvfBtn">Calculate IVF</string>
+    <string name="ivfBtnTxt">IVF Calculator</string>
+
 
 
 </resources>

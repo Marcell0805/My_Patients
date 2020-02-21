@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,20 +22,24 @@ import com.example.mypatients.models.Patient;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
-
+    Button printbtn,calcIvfBtn,genTimeBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-      binding=FragmentHomeBinding.inflate(inflater);
-        Patient patient= new Patient();
+                             ViewGroup container, Bundle savedInstanceState)
+    {
+        binding=FragmentHomeBinding.inflate(inflater);
+        //Patient patient= new Patient();
         //binding.setPatients(patient);
-
         return binding.getRoot();
     }
     public void SetListeners()
     {
-        //EditText nameText= SOCL
+        printbtn = getView().findViewById(R.id.printBtn);
+        calcIvfBtn=getView().findViewById(R.id.ivfCalcBtn);
+        genTimeBtn=getView().findViewById(R.id.tableBtn);
+
     }
+
 
     @Override
     public void onClick(View view) {
