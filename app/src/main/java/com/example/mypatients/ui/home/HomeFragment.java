@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -18,32 +20,86 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
 import com.example.mypatients.models.Patient;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
-    Button printbtn,calcIvfBtn,genTimeBtn;
+    private Button printbtn,calcIvfBtn,genTimeBtn;
+    private Spinner startTimeSpin,endTimeSpin;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
         binding=FragmentHomeBinding.inflate(inflater);
+        SetListeners(root);
         //Patient patient= new Patient();
         //binding.setPatients(patient);
-        return binding.getRoot();
+        return root;
     }
-    public void SetListeners()
+    private void SetListeners(View root)
     {
-        printbtn = getView().findViewById(R.id.printBtn);
-        calcIvfBtn=getView().findViewById(R.id.ivfCalcBtn);
-        genTimeBtn=getView().findViewById(R.id.tableBtn);
+        printbtn=root.findViewById(R.id.printBtn);
+        calcIvfBtn= root.findViewById(R.id.ivfCalcBtn);
+        genTimeBtn = root.findViewById(R.id.tableBtn);
 
+        printbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PrintDetails(view);
+            }
+        });
+        calcIvfBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Nav to IVF calc", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        genTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GenerateTable(view);
+            }
+        });
+
+        /*printbtn= (inflater.inflate(R.layout.fragment_home, container, false).findViewById(R.id.printBtn));
+        printbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });*/
+        /*calcIvfBtn= (inflater.inflate(R.layout.fragment_home, container, false).findViewById(R.id.ivfCalcBtn));
+        calcIvfBtn.setOnClickListener(this);
+        genTimeBtn= (inflater.inflate(R.layout.fragment_home, container, false).findViewById(R.id.tableBtn));
+        genTimeBtn.setOnClickListener(this);*/
+        /*startTimeSpin= (inflater.inflate(R.layout.fragment_home, container, false).findViewById(R.id.startTime));
+        startTimeSpin.setOnClickListener(this);
+        endTimeSpin= (inflater.inflate(R.layout.fragment_home, container, false).findViewById(R.id.endTime));
+        startTimeSpin.setOnClickListener(this);*/
     }
 
 
     @Override
     public void onClick(View view) {
-        //EditText a =view.findViewById(R.id.nameText).setOnClickListener();
+        Toast.makeText(view.getContext(),"Click event fired", Toast.LENGTH_SHORT).show();
+
+    }
+    private void PrintDetails(View view)
+    {
+        Snackbar.make(view, "Print Btn Action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+    private void GenerateTable(View view)
+    {
+        Snackbar.make(view, "Table", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 

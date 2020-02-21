@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/headingView"
@@ -47,7 +47,7 @@
                     android:ems="6"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:inputType="textPersonName"
+                    android:inputType="datetime"
                     android:hint="Today's Date"
                     android:nextFocusDown="@id/nameText"/>
 
@@ -70,41 +70,41 @@
                     android:id="@+id/nameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:inputType="textPersonName"
                     android:hint="@string/pName"
-                    android:nextFocusRight="@id/surnameText"/>
+                    android:nextFocusRight="@id/surnameText"
+                    android:autofillHints=""/>
                 <!--android:text="@{Patients.setPatientName()??Name}"-->
                 <EditText
                     android:id="@+id/surnameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/pSurname"
-                    android:ems="10"
                     android:inputType="textPersonName"
                     android:layout_alignParentRight="true"
-                    android:nextFocusDown="@id/dateBirthText"/>
+                    android:nextFocusDown="@id/dateBirthText"
+                    android:autofillHints=""/>
                 <EditText
                     android:id="@+id/dateBirthText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/nameText"
                     android:hint="@string/dobText"
-                    android:inputType="date"
-                    android:nextFocusRight="@id/ageText"/>
+                    android:inputType="datetime"
+                    android:nextFocusRight="@id/ageText"
+                    android:autofillHints=""/>
                 <EditText
                     android:id="@+id/ageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/surnameText"
                     android:hint="@string/age"
-                    android:ems="10"
                     android:inputType="number"
                     android:layout_alignParentRight="true"
-                    android:nextFocusDown="@id/doctorName"/>
+                    android:nextFocusDown="@id/doctorName"
+                    android:autofillHints=""/>
 
                 <Space
                     android:id="@+id/patientSpace"
@@ -117,24 +117,24 @@
                     android:id="@+id/doctorName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/patientSpace"
                     android:inputType="textPersonName"
                     android:nextFocusRight="@id/doctorSurname"
-                    android:hint="@string/doctorName" />
+                    android:hint="@string/doctorName"
+                    android:autofillHints=""/>
 
                 <EditText
                     android:id="@+id/doctorSurname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/patientSpace"
                     android:inputType="textPersonName"
                     android:hint="@string/doctorSName"
-                    android:nextFocusDown="@id/dietText"/>
+                    android:nextFocusDown="@id/dietText"
+                    android:autofillHints=""/>
 
                 <EditText
                     android:id="@+id/dietText"
@@ -142,22 +142,31 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:ems="10"
                     android:layout_below="@+id/doctorSurname"
                     android:inputType="textPersonName"
                     android:hint="@string/dietTxt"
+                    android:autofillHints=""
                     android:nextFocusDown="@id/ccText"/>
 
                 <EditText
                     android:id="@+id/ccText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
                     android:layout_below="@+id/dietText"
                     android:text='@{Patient.getCC()}'
                     android:hint="@string/ccTxt"
+                    android:autofillHints=""
                     android:nextFocusDown="@id/hasIvfRadio"/>
+                <Button
+                    android:layout_below="@id/dietText"
+                    android:background="@color/MainBtnColor"
+                    android:id="@+id/ivfCalcBtn"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/calcIvfBtn" />
 
                 <Space
                     android:id="@+id/radioSpaceTop"
@@ -266,19 +275,59 @@
                         android:text="Without Medication" />
                 </RadioGroup>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_below="@id/medicationGroup"
                     android:id="@+id/genTableView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/timesLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/startTimeTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_weight="4"
+                            android:text="Select Start Time" />
+
+                        <TextView
+                            android:id="@+id/endTimeTxt"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="Select End Time" />
+                    </LinearLayout>
+
                     <Spinner
-                        android:id="@+id/spinner"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/startTime"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:layout_weight="4"/>
+                        android:layout_weight="4"
+                        android:layout_below="@+id/timesLayout"
+                        android:entries="@array/dateTblGenList"/>
+                    <Spinner
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/timesLayout"
+                        android:id="@+id/endTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_weight="4"
+                        android:entries="@array/dateTblGenList"/>
+
                     <Button
+                        android:layout_below="@id/endTime"
                         android:background="@color/MainBtnColor"
+                        android:layout_centerInParent="true"
                         android:id="@+id/tableBtn"
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
@@ -288,14 +337,9 @@
                         android:layout_width="10dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnSpace"></Space>
-                    <Button
-                        android:background="@color/MainBtnColor"
-                        android:id="@+id/ivfCalcBtn"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="@string/calcIvfBtn" />
-                </LinearLayout>
+
+
+                </RelativeLayout>
                 <Space
                     android:id="@+id/separatorTable"
                     android:layout_below="@id/genTableView"
@@ -342,39 +386,39 @@
                     android:id="@+id/intakeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:layout_below="@id/spaceAfterGen"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:inputType="textPersonName"
-                    android:hint="@string/intakeTxt" />
+                    android:hint="@string/intakeTxt"
+                    android:autofillHints=""/>
 
                 <EditText
                     android:id="@+id/outTakeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/spaceAfterGen"
-                    android:ems="9"
                     android:inputType="textPersonName"
                     android:layout_alignParentRight="true"
-                    android:hint="@string/outtakeTxt" />
+                    android:hint="@string/outtakeTxt"
+                    android:autofillHints=""/>
                 <EditText
                     android:id="@+id/urineTxt"
                     android:layout_width="wrap_content"
                     android:layout_below="@+id/outTakeTxt"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
-                    android:hint="@string/urineTxt" />
+                    android:hint="@string/urineTxt"
+                    android:autofillHints=""/>
 
                 <EditText
                     android:id="@+id/stoolTxt"
                     android:layout_below="@+id/outTakeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:inputType="textPersonName"
                     android:hint="@string/stoolTxt"
+                    android:autofillHints=""
                     android:layout_alignParentRight="true"/>
 
                 <Button
