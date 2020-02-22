@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#0B99B1</color>
+    <color name="colorPrimaryDark">#009CB4</color>
     <color name="colorAccent">#D81B60</color>
     <color name="Headings">#C1DCE2</color>
     <color name="tableColor">#FFCA79FF</color>
     <color name="MainBtnColor">#F37EE1</color>
     <color name="tableHeading">#FFFFA2A2</color>
+    <color name="inputTblColor">#E7B4B4</color>
+    <color name="input2TblColor">#B4D9E7</color>
+    <color name="tableBgColor">#A29CFF</color>
 </resources>

@@ -287,7 +287,8 @@
                     <LinearLayout
                         android:id="@+id/timesLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@color/tableHeading">
                         <TextView
                             android:id="@+id/startTimeTxt"
                             android:layout_width="wrap_content"
@@ -353,16 +354,25 @@
                     android:orientation="horizontal"
                     android:id="@+id/timeTableLayout"
                     android:layout_width="match_parent"
+                    android:background="@color/tableBgColor"
                     android:layout_height="wrap_content">
 
                 </TableLayout>
                 <Space
 
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="5dp"
+                    android:background="@color/Headings"
                     android:layout_below="@id/timeTableLayout"
                     android:id="@+id/spaceAfterGen">
                 </Space>
+                <LinearLayout
+                    android:layout_below="@id/spaceAfterGen"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/spaceLayout"
+                    android:orientation="horizontal"
+                    android:background="@color/Headings"></LinearLayout>
 
                 <EditText
                     android:id="@+id/intakeTxt"

@@ -27,7 +27,7 @@
     <string name="doctorSName">Doctor Surname</string>
     <string name="dietTxt">Diet</string>
     <string name="ccTxt">CC : </string>
-    <string name="tableGenBtn">Update Table</string>
+    <string name="tableGenBtn">Create Table</string>
     <string name="intakeTxt">Intake</string>
     <string name="outtakeTxt">Outtake</string>
     <string name="urineTxt">Urine</string>
@@ -39,7 +39,7 @@
 
     <string name="timeTblHead">Time</string>
     <string name="prTblHead">PR</string>
-    <string name="tempTblHead">Temp</string>
+    <string name="tempTblHead">Temp°C</string>
     <string name="bpTblHead">BP</string>
     <string name="ivfTblHead">IVF</string>
 

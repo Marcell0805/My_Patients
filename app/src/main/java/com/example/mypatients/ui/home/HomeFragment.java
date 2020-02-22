@@ -6,6 +6,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,10 +28,12 @@ import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,7 +42,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FragmentHomeBinding binding;
     private Button printbtn,calcIvfBtn,genTimeBtn;
     private Spinner startTimeSpin,endTimeSpin;
-    private EditText dateOfBirthTxt;
+    private EditText dateOfBirthTxt, ageTxt;
     private View curView;
     private TableLayout timeGrid;
 
@@ -63,8 +66,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         calcIvfBtn= root.findViewById(R.id.ivfCalcBtn);
         genTimeBtn = root.findViewById(R.id.tableBtn);
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
+        ageTxt=root.findViewById(R.id.ageText);
         timeGrid = root.findViewById(R.id.timeTableLayout);
-        setDefaultNaming();
+        dateOfBirthTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(dateOfBirthTxt.getText().toString()!=null && dateOfBirthTxt.getText().toString()!="" && dateOfBirthTxt.getText().toString().length()==10)
+                {
+                    CalculateAge();
+                }
+            }
+        });
         setTxtListener();
 
         printbtn.setOnClickListener(new View.OnClickListener() {
@@ -88,16 +100,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void setDefaultNaming()
+    private void CalculateAge()
     {
-        genTimeBtn.setText("CREATE TABLE");
+        String sDateOfBirth=dateOfBirthTxt.getText().toString();
+        Date parsed= new Date();
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat format =
+                new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            parsed = format.parse(sDateOfBirth);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar[] calendar = new Calendar[2];
+        calendar[0]=new GregorianCalendar();
+        calendar[1]=new GregorianCalendar();
+        calendar[0].setTime(parsed);
+        int yearEntered = calendar[0].get(Calendar.YEAR);
+        calendar[1].setTime(currentTime);
+        int yearNow=calendar[1].get(Calendar.YEAR);
+        int iAge= yearNow-yearEntered;
+
+        if(calendar[1].get(Calendar.MONTH)<=calendar[0].get(Calendar.MONTH)&&iAge!=0)
+        {
+            if(calendar[1].get(Calendar.DAY_OF_MONTH)<calendar[0].get(Calendar.DAY_OF_MONTH))
+                iAge--;
+        }
+        if(iAge!=0)
+            ageTxt.setText(iAge);
     }
 
     private void setTxtListener()
     {
         TextWatcher tw = new TextWatcher() {
             private String current = "";
-            private String dateFormat = "DDMMYYYY";
+            private String dateFormat = "YYYYMMDD";
             private Calendar cal = Calendar.getInstance();
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -123,9 +160,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }else{
                         //This part makes sure that when we finish entering numbers
                         //the date is correct, fixing it otherwise
-                        int day  = Integer.parseInt(clean.substring(0,2));
-                        int mon  = Integer.parseInt(clean.substring(2,4));
-                        int year = Integer.parseInt(clean.substring(4,8));
+                        //int day  = Integer.parseInt(clean.substring(0,2));
+                        //int mon  = Integer.parseInt(clean.substring(2,4));
+                        //int year = Integer.parseInt(clean.substring(4,8));
+                        int year = Integer.parseInt(clean.substring(0,4));
+                        int mon  = Integer.parseInt(clean.substring(4,6));
+                        int day  = Integer.parseInt(clean.substring(6,8));
 
                         mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
                         cal.set(Calendar.MONTH, mon-1);
@@ -136,12 +176,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         //would be automatically corrected to 28/02/2012
 
                         day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
-                        clean = String.format("%02d%02d%02d",day, mon, year);
+                        //clean = String.format("%02d%02d%02d",day, mon, year);
+                        clean = String.format("%02d%02d%02d",year, mon, day);
                     }
 
-                    clean = String.format("%s/%s/%s", clean.substring(0, 2),
-                            clean.substring(2, 4),
-                            clean.substring(4, 8));
+                    clean = String.format("%s/%s/%s", clean.substring(0, 4),
+                            clean.substring(4, 6),
+                            clean.substring(6, 8));
 
                     sel = sel < 0 ? 0 : sel;
                     current = clean;
@@ -163,6 +204,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         String date_n = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
         EditText DateNow= root.findViewById(R.id.nowDate);
         DateNow.setText(date_n);
+        genTimeBtn.setText("CREATE TABLE");
     }
 
 
@@ -201,7 +243,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         CheckIfRows();
         ShapeDrawable sd = new ShapeDrawable();
-        setShapeDetails(sd,view);
+        ShapeDrawable sdCol = new ShapeDrawable();
+        ShapeDrawable inputSd = new ShapeDrawable();
+        ShapeDrawable input2Sd = new ShapeDrawable();
+        setShapeDetails(sd,view,sdCol,inputSd,input2Sd);
         int SizeWithHeading=rowsTimeValue.size()+1;
         TableRow[] rws=new TableRow[SizeWithHeading];
         TextView[] textView=new TextView[SizeWithHeading];
@@ -237,38 +282,71 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
             else
             {
-
                 textView[i]= new TextView(view.getContext());
                 textView[i].setText(rowsTimeValue.get(i-1));
                 textView[i].setGravity(Gravity.CENTER);
-                textView[i].setWidth(200);
-                textView[i].setBackgroundColor(getResources().getColor(R.color.tableColor));
-
+                textView[i].setWidth(215);
+                textView[i].setHeight(130);
+                textView[i].setBackground(sdCol);
+                //sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableColor));
+                //extView[i].setBackgroundColor(getResources().getColor(R.color.tableColor));
                 rws[i].addView(textView[i]);
                 for (int c=0;c<4;c++)
                 {
                     editTxt[c]= new EditText(view.getContext());
-                    editTxt[c].setHint("");
-                    editTxt[c].setWidth(200);
+                    editTxt[c].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editTxt[c].setHeight(130);
+                    editTxt[c].setWidth(215);
+                    editTxt[c].setGravity(Gravity.CENTER);
+                    if(c==1||c==3)
+                        editTxt[c].setBackground(inputSd);
+                    else
+                        editTxt[c].setBackground(input2Sd);
                     rws[i].addView(editTxt[c]);
                 }
-                rws[i].setWeightSum(5);
                 timeGrid.addView(rws[i]);
             }
         }
         genTimeBtn.setText("RECREATE TABLE");
     }
 
-    private void setShapeDetails(ShapeDrawable sd,View view)
+    private void setShapeDetails(ShapeDrawable sd,View view,ShapeDrawable sdCol,ShapeDrawable inputSd,ShapeDrawable input2Sd)
     {
         // Specify the shape of ShapeDrawable
         sd.setShape(new RectShape());
         // Specify the border color of shape
         sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableHeading));
         // Set the border width
-        sd.getPaint().setStrokeWidth(5f);
+        sd.getPaint().setStrokeWidth(10f);
         // Specify the style is a Stroke
         sd.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        //------------------------------------------------------------
+        // Specify the shape of ShapeDrawable
+        sdCol.setShape(new RectShape());
+        // Specify the border color of shape
+        sdCol.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableColor));
+        // Set the border width
+        sdCol.getPaint().setStrokeWidth(10f);
+        // Specify the style is a Stroke
+        sdCol.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        //------------------------------------------------------------
+        // Specify the shape of ShapeDrawable
+        inputSd.setShape(new RectShape());
+        // Specify the border color of shape
+        inputSd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.inputTblColor));
+        // Set the border width
+        inputSd.getPaint().setStrokeWidth(10f);
+        // Specify the style is a Stroke
+        inputSd.getPaint().setStyle(Paint.Style.STROKE);
+        //------------------------------------------------------------
+        // Specify the shape of ShapeDrawable
+        input2Sd.setShape(new RectShape());
+        // Specify the border color of shape
+        input2Sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.input2TblColor));
+        // Set the border width
+        input2Sd.getPaint().setStrokeWidth(10f);
+        // Specify the style is a Stroke
+        input2Sd.getPaint().setStyle(Paint.Style.STROKE);
     }
 
     private void CheckIfRows()
