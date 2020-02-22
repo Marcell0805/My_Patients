@@ -120,14 +120,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         calendar[1].setTime(currentTime);
         int yearNow=calendar[1].get(Calendar.YEAR);
         int iAge= yearNow-yearEntered;
-
-        if(calendar[1].get(Calendar.MONTH)<=calendar[0].get(Calendar.MONTH)&&iAge!=0)
+        Boolean isMonthAfter=calendar[1].get(Calendar.MONTH)>=calendar[0].get(Calendar.MONTH);
+        Boolean isDayAft=calendar[1].get(Calendar.DAY_OF_MONTH)>=calendar[0].get(Calendar.DAY_OF_MONTH);
+        if(isMonthAfter&&iAge!=0)
         {
-            if(calendar[1].get(Calendar.DAY_OF_MONTH)<calendar[0].get(Calendar.DAY_OF_MONTH))
+            if(!isDayAft)
                 iAge--;
         }
+        else if(iAge!=0)
+        {
+            iAge--;
+        }
         if(iAge!=0)
-            ageTxt.setText(iAge);
+        {
+            ageTxt.setText(String.valueOf(iAge));
+        }
     }
 
     private void setTxtListener()
