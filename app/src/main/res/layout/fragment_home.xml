@@ -12,7 +12,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
             <TextView
                 android:id="@+id/headingView"
                 android:layout_height="@dimen/headingMain"
@@ -350,35 +352,15 @@
                     android:layout_below="@id/separatorTable"
                     android:orientation="horizontal"
                     android:id="@+id/timeTableLayout"
-                    android:background="@color/tableColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
-                        <TextView android:text="Time" android:layout_weight="1"
-                            android:background="#FFFFA2A2" android:textStyle="bold"/>
-                        <TextView android:text="PR" android:layout_weight="1"
-                            android:background="#FFFFA2A2" android:textStyle="bold"/>
-                        <TextView android:text="Temp" android:layout_weight="1"
-                            android:background="#FFFFA2A2" android:textStyle="bold"/>
-                        <TextView android:text="BP" android:layout_weight="1"
-                            android:background="#FFFFA2A2" android:textStyle="bold"/>
-                        <TextView android:text="IVF" android:layout_weight="1"
-                            android:background="#FFFFA2A2" android:textStyle="bold"/>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-
                 </TableLayout>
                 <Space
+
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/genTableView"
+                    android:layout_below="@id/timeTableLayout"
                     android:id="@+id/spaceAfterGen">
                 </Space>
 

@@ -37,6 +37,12 @@
     <string name="calcIvfBtn">Calculate IVF</string>
     <string name="ivfBtnTxt">IVF Calculator</string>
 
+    <string name="timeTblHead">Time</string>
+    <string name="prTblHead">PR</string>
+    <string name="tempTblHead">Temp</string>
+    <string name="bpTblHead">BP</string>
+    <string name="ivfTblHead">IVF</string>
+
     <string-array name="dateTblGenList">
         <item>0:00</item>
         <item>1:00</item>
