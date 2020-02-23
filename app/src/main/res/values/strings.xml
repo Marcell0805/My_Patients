@@ -1,3 +1,85 @@
 <resources>
     <string name="app_name">My Patients</string>
+    <string name="title_activity_patients_ui_nav">PatientsUiNav</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <!--Strings for the Patient UI section-->
+
+    <string name="patient_heading">Patient Details</string>
+    <string name="roomNoTxt">Room Number</string>
+    <string name="pName">Patient Name</string>
+    <string name="pSurname">Patient Surname</string>
+    <string name="dobText">Date of Birth</string>
+    <string name="age">Age</string>
+    <string name="doctorName">Doctor Name</string>
+    <string name="doctorSName">Doctor Surname</string>
+    <string name="dietTxt">Diet</string>
+    <string name="ccTxt">CC : </string>
+    <string name="tableGenBtn">Create Table</string>
+    <string name="intakeTxt">Intake</string>
+    <string name="outtakeTxt">Outtake</string>
+    <string name="urineTxt">Urine</string>
+    <string name="stoolTxt">Stool</string>
+    <string name="printBtnTxt">Print</string>
+    <string name="emailBtnTxt">Email</string>
+    <string name="ngtBtnTxt">NGT</string>
+    <string name="calcIvfBtn">Calculate IVF</string>
+    <string name="ivfBtnTxt">IVF Calculator</string>
+
+    <string name="timeTblHead">Time</string>
+    <string name="prTblHead">PR</string>
+    <string name="tempTblHead">Temp°C</string>
+    <string name="bpTblHead">BP</string>
+    <string name="ivfTblHead">IVF</string>
+    <string name="o2TblHead">O2</string>
+
+    <string-array name="dateTblGenList">
+        <item>0:00</item>
+        <item>1:00</item>
+        <item>2:00</item>
+        <item>3:00</item>
+        <item>4:00</item>
+        <item>5:00</item>
+        <item>6:00</item>
+        <item>7:00</item>
+        <item>8:00</item>
+        <item>9:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+    </string-array>
+    <string name="title_activity_ivf__calculator">IVF Calculator</string>
+
+    //------------------------------------------------------------------------------------------
+    //Calculator screen values
+    //------------------------------------------------------------------------------------------
+    <string name="ivfCalcTitle">IVF Calculator</string>
+    <string name="mlTxt">Volume ml</string>
+    <string name="calcTimeMinTxt">Time in Minutes</string>
+    <string name="calcTimeHourTxt">Time in hours</string>
+    <string name="calcDripRateTxt">Drip Rate</string>
+    <string name="calcValue">Calculated Value</string>
 </resources>
