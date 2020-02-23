@@ -71,7 +71,15 @@
         <item>22:00</item>
         <item>23:00</item>
     </string-array>
+    <string name="title_activity_ivf__calculator">IVF Calculator</string>
 
-
-
+    //------------------------------------------------------------------------------------------
+    //Calculator screen values
+    //------------------------------------------------------------------------------------------
+    <string name="ivfCalcTitle">IVF Calculator</string>
+    <string name="mlTxt">Volume ml</string>
+    <string name="calcTimeMinTxt">Time in Minutes</string>
+    <string name="calcTimeHourTxt">Time in hours</string>
+    <string name="calcDripRateTxt">Drip Rate</string>
+    <string name="calcValue">Calculated Value</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.mypatients.ui.home;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
+import com.example.mypatients.ui.Ivf_Calculator;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
@@ -42,7 +44,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FragmentHomeBinding binding;
     private Button printbtn,calcIvfBtn,genTimeBtn;
     private Spinner startTimeSpin,endTimeSpin;
-    private EditText dateOfBirthTxt, ageTxt;
+    private EditText dateOfBirthTxt;
+    private TextView ageTxt;
     private View curView;
     private TableLayout timeGrid;
 
@@ -68,13 +71,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
         ageTxt=root.findViewById(R.id.ageText);
         timeGrid = root.findViewById(R.id.timeTableLayout);
-        dateOfBirthTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        dateOfBirthTxt.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(dateOfBirthTxt.getText().toString()!=null && dateOfBirthTxt.getText().toString()!="" && dateOfBirthTxt.getText().toString().length()==10)
                 {
                     CalculateAge();
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
         setTxtListener();
@@ -88,8 +101,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         calcIvfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Nav to IVF calc", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showIvfCal(view);
             }
         });
         genTimeBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +110,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 StartGenerateTable(view);
             }
         });
+    }
+
+    private void showIvfCal(View view)
+    {
+        Intent ivfCalc= new Intent(getActivity(), Ivf_Calculator.class);
+        getActivity().startActivity(ivfCalc);
     }
 
     private void CalculateAge()
@@ -295,6 +313,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 textView[i].setWidth(215);
                 textView[i].setHeight(150);
                 textView[i].setBackground(sdCol);
+                if(i==0)
+                {
+                    textView[i].setFreezesText(true);
+                }
                 //sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableColor));
                 //extView[i].setBackgroundColor(getResources().getColor(R.color.tableColor));
                 rws[i].addView(textView[i]);
