@@ -257,34 +257,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         int SizeWithHeading=rowsTimeValue.size()+1;
         TableRow[] rws=new TableRow[SizeWithHeading];
         TextView[] textView=new TextView[SizeWithHeading];
-        EditText[] editTxt=new EditText[4];
+        EditText[] editTxt=new EditText[5];
 
         for (int i=0;i<SizeWithHeading;i++)
         {
             rws[i]=new TableRow(view.getContext());
             if(i==0)
             {
-                TextView[] headTxt=new TextView[5];
+                TextView[] headTxt=new TextView[6];
                 for (int hT=0;hT<headTxt.length;hT++)
                 {
                     headTxt[hT]= new TextView(view.getContext());
                     headTxt[hT].setTextSize(15);
                     headTxt[hT].setTypeface(null, Typeface.BOLD);
                     headTxt[hT].setGravity(Gravity.LEFT);
-                    headTxt[hT].setWidth(200);
                 }
                 headTxt[0].setText(getResources().getString(R.string.timeTblHead));
                 headTxt[1].setText(getResources().getString(R.string.prTblHead));
                 headTxt[2].setText(getResources().getString(R.string.tempTblHead));
                 headTxt[3].setText(getResources().getString(R.string.bpTblHead));
                 headTxt[4].setText(getResources().getString(R.string.ivfTblHead));
+                headTxt[5].setText(getResources().getString(R.string.o2TblHead));
                 for (int h=0;h<headTxt.length;h++)
                 {
                     rws[i].setBackground(sd);
                     rws[i].setGravity(Gravity.CENTER);
                     rws[i].addView(headTxt[h]);
                 }
-                rws[i].setWeightSum(5);
+                //rws[i].setWeightSum(6);
                 timeGrid.addView(rws[i]);
             }
             else
@@ -293,16 +293,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 textView[i].setText(rowsTimeValue.get(i-1));
                 textView[i].setGravity(Gravity.CENTER);
                 textView[i].setWidth(215);
-                textView[i].setHeight(130);
+                textView[i].setHeight(150);
                 textView[i].setBackground(sdCol);
                 //sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableColor));
                 //extView[i].setBackgroundColor(getResources().getColor(R.color.tableColor));
                 rws[i].addView(textView[i]);
-                for (int c=0;c<4;c++)
+                for (int c=0;c<5;c++)
                 {
                     editTxt[c]= new EditText(view.getContext());
                     editTxt[c].setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editTxt[c].setHeight(130);
+                    editTxt[c].setHeight(150);
                     editTxt[c].setWidth(215);
                     editTxt[c].setGravity(Gravity.CENTER);
                     if(c==1||c==3)

@@ -34,6 +34,7 @@
     <string name="stoolTxt">Stool</string>
     <string name="printBtnTxt">Print</string>
     <string name="emailBtnTxt">Email</string>
+    <string name="ngtBtnTxt">NGT</string>
     <string name="calcIvfBtn">Calculate IVF</string>
     <string name="ivfBtnTxt">IVF Calculator</string>
 
@@ -42,6 +43,7 @@
     <string name="tempTblHead">Temp°C</string>
     <string name="bpTblHead">BP</string>
     <string name="ivfTblHead">IVF</string>
+    <string name="o2TblHead">O2</string>
 
     <string-array name="dateTblGenList">
         <item>0:00</item>

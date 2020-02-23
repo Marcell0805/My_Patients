@@ -10,4 +10,5 @@
     <color name="inputTblColor">#E7B4B4</color>
     <color name="input2TblColor">#B4D9E7</color>
     <color name="tableBgColor">#A29CFF</color>
+    <color name="appBgColor">#F2F9FC</color>
 </resources>

@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:focusable="true"
+            android:background="@color/appBgColor"
             android:focusableInTouchMode="true">
             <TextView
                 android:id="@+id/headingView"
@@ -348,22 +349,30 @@
                     android:layout_below="@id/genTableView"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"></Space>
+                <HorizontalScrollView
+                    android:layout_below="@+id/genTableView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tableScroll">
+                    <TableLayout
+                        android:layout_below="@id/tableScroll"
+                        android:orientation="horizontal"
+                        android:id="@+id/timeTableLayout"
+                        android:layout_width="match_parent"
+                        android:background="@color/tableBgColor"
+                        android:layout_height="wrap_content">
 
-                <TableLayout
-                    android:layout_below="@id/separatorTable"
-                    android:orientation="horizontal"
-                    android:id="@+id/timeTableLayout"
-                    android:layout_width="match_parent"
-                    android:background="@color/tableBgColor"
-                    android:layout_height="wrap_content">
+                    </TableLayout>
 
-                </TableLayout>
+                </HorizontalScrollView>
+
+
                 <Space
 
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:background="@color/Headings"
-                    android:layout_below="@id/timeTableLayout"
+                    android:layout_below="@id/tableScroll"
                     android:id="@+id/spaceAfterGen">
                 </Space>
                 <LinearLayout
@@ -412,6 +421,15 @@
                     android:hint="@string/stoolTxt"
                     android:autofillHints=""
                     android:layout_alignParentRight="true"/>
+                <EditText
+                    android:id="@+id/ngtTxt"
+                    android:layout_below="@+id/stoolTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="@string/ngtBtnTxt"
+                    android:autofillHints=""
+                    android:layout_alignParentLeft="true"/>
 
                 <Button
                     android:id="@+id/printBtn"
@@ -420,7 +438,7 @@
                     android:text="@string/printBtnTxt"
                     android:layout_centerInParent="true"
                     android:background="@color/MainBtnColor"
-                    android:layout_below="@id/stoolTxt"/>
+                    android:layout_below="@id/ngtTxt"/>
 
 
             </RelativeLayout>
