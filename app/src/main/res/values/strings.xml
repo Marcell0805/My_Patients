@@ -82,4 +82,13 @@
     <string name="calcTimeHourTxt">Time in hours</string>
     <string name="calcDripRateTxt">Drip Rate</string>
     <string name="calcValue">Calculated Value</string>
+    <string name="without_neb">Without Neb</string>
+    <string name="with_neb">With Neb</string>
+    <string name="without_medication">Without Medication</string>
+    <string name="with_medication">With Medication</string>
+    <string name="with_ivf">With IVF</string>
+    <string name="without_ivf">Without IVF</string>
+    <string name="vsq">Vsq</string>
+    <string name="i_amp_oq"><![CDATA[I & Oq]]></string>
+    <string name="radioGroupHead">Select the relative:</string>
 </resources>

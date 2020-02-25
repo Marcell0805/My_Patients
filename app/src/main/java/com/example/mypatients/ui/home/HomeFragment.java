@@ -1,11 +1,15 @@
 package com.example.mypatients.ui.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
+import android.print.PrintManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -15,6 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -25,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.mypatients.PrinterClass;
 import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
 import com.example.mypatients.ui.Ivf_Calculator;
@@ -33,6 +41,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -44,10 +53,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FragmentHomeBinding binding;
     private Button printbtn,calcIvfBtn,genTimeBtn;
     private Spinner startTimeSpin,endTimeSpin;
-    private EditText dateOfBirthTxt;
+    private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt,intakeTxt,outTxt,stoolTxt,urineTxt,ngtTxt;
     private TextView ageTxt;
     private View curView;
     private TableLayout timeGrid;
+    private PrintManager printManager;
+    private RadioButton ivfRadioBtn,vsqRadioBtn,nevRadioBtn,medRadioBtn,noIvfRadioBtn,noVsqRadioBtn,noNevRadioBtn,noMedRadioBtn;
+    private RadioGroup ivfRadioGroup,vsqRadioGroup, nebRadioGroup,medRadioGroup;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -55,12 +67,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         binding=FragmentHomeBinding.inflate(inflater);
         SetListeners(root);
+        /*
+        If Testing Uncomment below method
+         */
+        setTestValues();
+
         curView=root;
+        printManager = (PrintManager) getActivity()
+                .getSystemService(root.getContext().PRINT_SERVICE);
         SetDefaultValues(root);
+
         //Patient patient= new Patient();
         //binding.setPatients(patient);
         return root;
     }
+
+    private void setTestValues()
+    {
+        dateOfBirthTxt.setText("1996/08/05");
+        ageTxt.setText("23");
+        roomTxt.setText("Room 1");
+        dateNowTxt.setText("25 Feb 2020");
+        pName.setText("Marcell");
+        pSname.setText("van Niekerk");
+        dName.setText("John");
+        dSname.setText("Doe");
+        dietTxt.setText("Apples and fruit");
+        ccTxt.setText("12");
+        intakeTxt.setText("20");
+        outTxt.setText("30");
+        stoolTxt.setText("40");
+        urineTxt.setText("20");
+        ngtTxt.setText("30");
+    }
+
     private void SetListeners(View root)
     {
         startTimeSpin=root.findViewById(R.id.startTime);
@@ -71,6 +111,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
         ageTxt=root.findViewById(R.id.ageText);
         timeGrid = root.findViewById(R.id.timeTableLayout);
+        roomTxt=root.findViewById(R.id.roomNoText);
+        dateNowTxt=root.findViewById(R.id.nowDate);
+        pName=root.findViewById(R.id.nameText);
+        pSname=root.findViewById(R.id.surnameText);
+        dateOfBirthTxt=root.findViewById(R.id.dateBirthText);
+        dName=root.findViewById(R.id.doctorName);
+        dSname=root.findViewById(R.id.doctorSurname);
+        dietTxt=root.findViewById(R.id.dietText);
+        ccTxt=root.findViewById(R.id.ccText);
+        intakeTxt=root.findViewById(R.id.intakeTxt);
+        outTxt=root.findViewById(R.id.outTakeTxt);
+        stoolTxt=root.findViewById(R.id.stoolTxt);
+        urineTxt=root.findViewById(R.id.urineTxt);
+        ngtTxt=root.findViewById(R.id.ngtTxt);
+        //Radio Groups
+        ivfRadioGroup=root.findViewById(R.id.ivfGroup);
+        medRadioGroup=root.findViewById(R.id.medicationGroup);
+        nebRadioGroup =root.findViewById(R.id.NebGroup);
+        vsqRadioGroup=root.findViewById(R.id.sqOqGroup);
+        //---------------------------------------------------------
+        //--Radio Buttons
+        //---------------------------------------------------------
+        ivfRadioBtn=root.findViewById(R.id.hasIvfRadio);
+        vsqRadioBtn=root.findViewById(R.id.vsqRadio);
+        nevRadioBtn=root.findViewById(R.id.nedRadio);
+        medRadioBtn=root.findViewById(R.id.medicationRadio);
+        noIvfRadioBtn=root.findViewById(R.id.hasIvfRadio);
+        noVsqRadioBtn=root.findViewById(R.id.noVsqRadio);
+        noNevRadioBtn=root.findViewById(R.id.NoNebRadio);
+        noMedRadioBtn=root.findViewById(R.id.noMedicationRadio);
+
+
         dateOfBirthTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -95,7 +167,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         printbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrintDetails(view);
+                //Bitmap a=createBitmapFromView(view);
+                //PrintDetails();
+                if(hasFields())
+                {
+                    if(hasTable())
+                    {
+                        PrintDetails();
+                    }
+                    else
+                        Snackbar.make(curView,"No table created.",Snackbar.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Snackbar.make(curView,"Not all values are present",Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         calcIvfBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +196,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 StartGenerateTable(view);
             }
         });
+    }
+
+    private boolean hasTable() {
+        if(timeGrid.getChildCount()>0)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean hasFields()
+    {
+        boolean hasRequired=true;
+        boolean hasdateAge=false;
+        List<String> values=setPrintDetails();
+        String[][] splitL= new String[values.size()][2];
+        values.toArray(new String[values.size() * 2]);
+        String[]a;
+        for(int i=0;i<values.size();i++)
+        {
+            String s=values.get(i);
+            a=s.split("-");
+            splitL[i][0]=a[0];
+            splitL[i][1]=a[1];
+        }
+        for(int i=0;i<splitL.length;i++)
+        {
+            if(splitL[i][1].toLowerCase().contains(getResources().getString(R.string.dobText).toLowerCase())||splitL[i][1].contains(getResources().getString(R.string.age).toLowerCase()))
+            {
+                if(!splitL[i][0].equals(""))
+                    hasdateAge=true;
+                else if(!hasdateAge)
+                    hasdateAge=false;
+            }
+            else
+            {
+                if(splitL[0][0].equals(""))
+                    hasRequired=false;
+            }
+        }
+        if(hasRequired&&hasdateAge)
+            return  hasRequired;
+        return  false;
     }
 
     private void showIvfCal(View view)
@@ -238,11 +366,146 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Toast.makeText(view.getContext(),"Click event fired", Toast.LENGTH_SHORT).show();
 
     }
-    private void PrintDetails(View view)
+    private void PrintDetails()
     {
-        Snackbar.make(view, "Print Btn Action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        PrinterClass printerClass= new PrinterClass();
+        List<String> normalDetails=setPrintDetails();
+        //String[] tableDetails=null;
+        String[][] tableDetails=setPrintForTblDetails();
+        printerClass.printDocument(curView,printManager,normalDetails,tableDetails);
+
     }
+
+    private  String[][] setPrintForTblDetails()
+    {
+        //Sets single array for row data
+        //Count for the first array size
+        int rowCount =timeGrid.getChildCount();
+        //Setting single array
+        String[] tableValues= new String[rowCount];
+        for (int i=0;i<rowCount;i++)
+        {
+            TableRow tableRow=(TableRow)timeGrid.getChildAt(i);
+            String[] tableColValues= new String[tableRow.getChildCount()];
+            for(int c=0;c<tableRow.getChildCount();c++)
+            {
+                TextView a =(TextView)tableRow.getChildAt(c);
+                String b=a.getText().toString();
+                if(c==0)
+                    tableColValues[i]=b;
+                else
+                    tableColValues[i]+="; "+b;
+
+            }
+            tableValues[i]=tableColValues[i];
+
+        }
+        //Get the column count
+        List<String>list= Arrays.asList(tableValues);
+        String s=list.get(0);
+        String[]a =s.split(";");
+        int columnCount=a.length;
+        //------------------------------------
+
+        String[][] tableDetails= new String[rowCount][columnCount];
+        String[]values;
+
+        for(int i=0;i<rowCount;i++)
+        {
+            String r=list.get(i);
+            values=r.split(";");
+            String[]vCount=values;
+            tableDetails[i][0]=values[0];
+            for(int c=0;i<columnCount;c++)
+            {
+                if(c<vCount.length)
+                    tableDetails[i][c]=values[c];
+                else
+                    break;
+            }
+        }
+
+
+        //return tableValues;
+
+        return tableDetails;
+    }
+
+    private List<String> setPrintDetails()
+    {
+        List<String> col=new ArrayList<>();
+        col.add(roomTxt.getText().toString()+"-"+roomTxt.getHint()+":");
+        col.add(dateNowTxt.getText().toString()+"-"+dateNowTxt.getHint()+":");
+        col.add(pName.getText().toString()+"-"+pName.getHint()+":");
+        col.add(pSname.getText().toString()+"-"+pSname.getHint()+":");
+        col.add(dateOfBirthTxt.getText().toString()+"-"+dateOfBirthTxt.getHint()+":");
+        col.add(ageTxt.getText().toString()+"-"+ageTxt.getHint()+":");
+        col.add(dName.getText().toString()+"-"+dName.getHint()+":");
+        col.add(dSname.getText().toString()+"-"+dSname.getHint()+":");
+        col.add(dietTxt.getText().toString()+"-"+dietTxt.getHint()+":");
+        col.add(ccTxt.getText().toString()+"-"+ccTxt.getHint());
+        col.add(intakeTxt.getText().toString()+" ml-"+intakeTxt.getHint()+":");
+        col.add(outTxt.getText().toString()+"ml-"+outTxt.getHint()+":");
+        col.add(stoolTxt.getText().toString()+"ml-"+stoolTxt.getHint()+":");
+        col.add(urineTxt.getText().toString()+"ml-"+urineTxt.getHint()+":");
+        col.add(ngtTxt.getText().toString()+"ml-"+ngtTxt.getHint()+":");
+        int ivfId=ivfRadioGroup.getCheckedRadioButtonId();
+        int medId=medRadioGroup.getCheckedRadioButtonId();
+        int vsqId=vsqRadioGroup.getCheckedRadioButtonId();
+        int nebId=nebRadioGroup.getCheckedRadioButtonId();
+
+
+        if(ivfId==-1)
+        {
+            //col.add("-:");
+        }
+        else if(ivfId==ivfRadioBtn.getId())
+        {
+            col.add("true"+"-"+ivfRadioBtn.getText()+":");
+        }
+        else
+        {
+            col.add("true"+"-"+noIvfRadioBtn.getText()+":");
+        }
+        if(medId==-1)
+        {
+            //col.add("-:");
+        }
+        else if(medId==medRadioBtn.getId())
+        {
+            col.add("true"+"-"+medRadioBtn.getText()+":");
+        }
+        else
+        {
+            col.add("true"+"-"+noMedRadioBtn.getText()+":");
+        }
+        if(vsqId==-1)
+        {
+            //col.add("-:");
+        }
+        else if(vsqId==vsqRadioBtn.getId())
+        {
+            col.add("Yes"+"-"+vsqRadioBtn.getText()+":");
+        }
+        else
+        {
+            col.add("Yes"+"-"+"I & Oq:");
+        }
+        if(nebId==-1)
+        {
+            //col.add("-:");
+        }
+        else if(nebId==nevRadioBtn.getId())
+        {
+            col.add("Yes"+"-"+nevRadioBtn.getText()+":");
+        }
+        else
+        {
+            col.add("Yes"+"-"+noNevRadioBtn.getText()+":");
+        }
+        return col;
+    }
+
     private void StartGenerateTable(View view)
     {
         String startTime = startTimeSpin.getSelectedItem().toString().replaceAll(":00","");
@@ -408,31 +671,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    //private HomeViewModel homeViewModel;
+    public @NonNull static Bitmap createBitmapFromView(@NonNull View view)
+    {
 
-    /*public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-       homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        FragmentHomeBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home,container,false);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-       final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
-    }*/
-/*
-@Override
-public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    FragmentTest binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test, container, false);
-    Item item = new Item();
-    item.setName("Thomas");
-    binding.setItem(item);
-    return binding.getRoot();
-}
- */
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        view.measure(View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
+        view.layout(0,0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        Bitmap a=Bitmap.createBitmap(view.getMeasuredHeight(),view.getMeasuredWidth(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap= Bitmap.createBitmap(view.getWidth(),view.getHeight(),Bitmap.Config.ARGB_8888);
+
+        return bitmap;
+    }
 }

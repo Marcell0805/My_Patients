@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mypatients">
-
+    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +15,7 @@
             android:label="@string/title_activity_ivf__calculator"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity
             android:name=".PatientsUiNav"
             android:label="@string/title_activity_patients_ui_nav"
