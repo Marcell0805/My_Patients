@@ -461,11 +461,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(ivfId==ivfRadioBtn.getId())
         {
-            col.add("true"+"-"+ivfRadioBtn.getText()+":");
+            col.add("Yes"+"-"+ivfRadioBtn.getText()+":");
         }
         else
         {
-            col.add("true"+"-"+noIvfRadioBtn.getText()+":");
+            col.add("Yes"+"-"+noIvfRadioBtn.getText()+":");
         }
         if(medId==-1)
         {
@@ -473,11 +473,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(medId==medRadioBtn.getId())
         {
-            col.add("true"+"-"+medRadioBtn.getText()+":");
+            col.add("Yes"+"-"+medRadioBtn.getText()+":");
         }
         else
         {
-            col.add("true"+"-"+noMedRadioBtn.getText()+":");
+            col.add("Yes"+"-"+noMedRadioBtn.getText()+":");
         }
         if(vsqId==-1)
         {
@@ -580,8 +580,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 {
                     textView[i].setFreezesText(true);
                 }
-                //sd.getPaint().setColor(ContextCompat.getColor(view.getContext(), R.color.tableColor));
-                //extView[i].setBackgroundColor(getResources().getColor(R.color.tableColor));
                 rws[i].addView(textView[i]);
                 for (int c=0;c<5;c++)
                 {
@@ -668,20 +666,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         int rows=(eTime-sTime);
         return rows;
-    }
-
-
-    public @NonNull static Bitmap createBitmapFromView(@NonNull View view)
-    {
-
-        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-        view.measure(View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
-        view.layout(0,0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        Bitmap a=Bitmap.createBitmap(view.getMeasuredHeight(),view.getMeasuredWidth(), Bitmap.Config.ARGB_8888);
-        Bitmap bitmap= Bitmap.createBitmap(view.getWidth(),view.getHeight(),Bitmap.Config.ARGB_8888);
-
-        return bitmap;
     }
 }

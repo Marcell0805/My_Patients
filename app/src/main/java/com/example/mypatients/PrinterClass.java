@@ -20,6 +20,7 @@ import android.graphics.pdf.PdfDocument;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
 import com.itextpdf.text.BaseColor;
@@ -53,7 +54,7 @@ public class PrinterClass extends Activity
         Context v= view.getContext();
         try
         {
-            String jobName = v.getString(R.string.app_name) +
+            String jobName =
                     " Document";
 
             printManager.print(jobName, new
@@ -100,7 +101,7 @@ public class PrinterClass extends Activity
             if (totalPages > 0)
             {
                 PrintDocumentInfo.Builder builder = new PrintDocumentInfo
-                        .Builder("patient_details.pdf")
+                        .Builder("patient_output.pdf")
                         .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
                         .setPageCount(totalPages);
 
@@ -215,86 +216,79 @@ public class PrinterClass extends Activity
             }
         }
         paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(2);
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(1);
+        //paint.setStyle(Paint.Style.STROKE);
         //-------------------------------------------------------------------
-        //Creation of auto-size table
+        //Creation of auto-size table points
         //-------------------------------------------------------------------
-        /*int yStartPoint=leftMargin;
-        int recLength=yStartPoint+500;
-        int xStartPoint=LineSpace+30;
-        int recWidth=LineSpace+200;*/
-
         int colCountTotal=tableDetails[0].length;
         int yStartPoint=leftMargin;
         int recLength=0;
         int xStartPoint=LineSpace+30;
         int recWidth=colCountTotal*70;
-
-        //int tableWidth=leftMargin + 500;
         LineSpace=LineSpace+30;
-
-
-
         leftMargin=leftMargin+5;
         LineSpace=LineSpace + 10;
+        //-------------------------------------------------------------------
+        //Font Settings and colors
+        //-------------------------------------------------------------------
+        k=0;
         Typeface plain=Typeface.DEFAULT;
         Typeface bold= Typeface.defaultFromStyle(Typeface.BOLD);
+        //-------------------------------------------------------------------
+        //Creating table
+        //-------------------------------------------------------------------
         int colWidth=(recWidth/tableDetails[0].length);
         colWidth=colWidth+20;
         int rows=tableDetails.length;
         int curXstartPoint=LineSpace;
-        int nowWidth=0;
-        int aaa=0;
+        int recTotalWidth=0;
         for(int l=0;l<rows;l++)
         {
             recLength=LineSpace;
-            paint.setTypeface(bold);
+            paint.setTypeface(plain);
+            //paint.setTypeface(bold);
             paint.setTextSize(10);
             canvas.drawText(tableDetails[l][0], leftMargin, LineSpace, paint);
             int cWidth=colWidth;
             int cCount=tableDetails[l].length;
-            int drawColCount=1;
-
+            //paint.setColor(Color.parseColor("#FFCA79FF"));
             canvas.drawRect(yStartPoint,LineSpace,colWidth,curXstartPoint,paint);
             for(int c=0;c<cCount;c++)
             {
-                nowWidth=nowWidth+curXstartPoint;
-                paint.setStyle(Paint.Style.STROKE);
+                //paint.setStyle(Paint.Style.STROKE);
+                paint.setColor(Color.BLACK);
                 paint.setTextSize(10);
                 if(c==0)
                 {
-                    paint.setTypeface(bold);
+
+                    paint.setTypeface(plain);
                     c++;
-                    canvas.drawText(tableDetails[l][c], cWidth*c, LineSpace, paint);
-                    //canvas.drawRect(300,xStartPoint+30,60,LineSpace,paint);
+                    canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace-1, paint);
                 }
                 else
                 {
                     paint.setTypeface(plain);
-                    canvas.drawText(tableDetails[l][c], cWidth*c, LineSpace, paint);
+                    canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace, paint);
 
                 }
-
-                //canvas.drawRect(how far to the right it goes,lowest point from how far from the top of the page,60,15,paint);
-                //canvas.drawRect(colWidth,xStartPoint+30,90,LineSpace,paint);
-                //canvas.drawRect(yStartPoint,xStartPoint,recWidth,recLength,paint);
-                //canvas.drawRect(yStartPoint+colWidth,xStartPoint,cWidth-15,nowWidth,paint);
                 for(int b=1;b<=cCount;b++)
                 {
+                    paint.setStyle(Paint.Style.STROKE);
                     canvas.drawRect(colWidth*b,xStartPoint,90,LineSpace,paint);
-                    aaa=colWidth*b;
+                    recTotalWidth=colWidth*b;
                 }
+                //paint.setStyle(Paint.Style.STROKE);
                 //cWidth=cWidth+60;
             }
             if(l!=rows)
                 LineSpace=LineSpace + 20;
 
         }
-        recWidth=colWidth*(colCountTotal-1);
+        //paint.setColor(Color.BLACK);
 
-
-        canvas.drawRect(yStartPoint,xStartPoint,aaa,recLength,paint);
+        paint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect(yStartPoint,xStartPoint,recTotalWidth,recLength,paint);
     }
 
 }
