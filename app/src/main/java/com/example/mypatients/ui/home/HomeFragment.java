@@ -386,7 +386,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (int i=0;i<rowCount;i++)
         {
             TableRow tableRow=(TableRow)timeGrid.getChildAt(i);
-            String[] tableColValues= new String[tableRow.getChildCount()];
+            String[] tableColValues= new String[timeGrid.getChildCount()];
             for(int c=0;c<tableRow.getChildCount();c++)
             {
                 TextView a =(TextView)tableRow.getChildAt(c);
@@ -416,7 +416,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             values=r.split(";");
             String[]vCount=values;
             tableDetails[i][0]=values[0];
-            for(int c=0;i<columnCount;c++)
+            for(int c=0;c<columnCount;c++)
             {
                 if(c<vCount.length)
                     tableDetails[i][c]=values[c];
