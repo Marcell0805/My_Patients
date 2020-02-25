@@ -8,9 +8,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_home">Patients</string>
+    <string name="menu_gallery">Delivery</string>
+    <string name="menu_slideshow">OR</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
@@ -91,4 +91,5 @@
     <string name="vsq">Vsq</string>
     <string name="i_amp_oq"><![CDATA[I & Oq]]></string>
     <string name="radioGroupHead">Select the relative:</string>
+    <string name="nav_barSubHead">Welcome back!</string>
 </resources>

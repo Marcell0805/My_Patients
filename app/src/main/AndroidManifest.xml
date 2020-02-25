@@ -18,7 +18,7 @@
 
         <activity
             android:name=".PatientsUiNav"
-            android:label="@string/title_activity_patients_ui_nav"
+            android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
