@@ -1,11 +1,8 @@
 package com.example.mypatients.ui.home;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
@@ -19,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -53,10 +49,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FragmentHomeBinding binding;
     private Button printbtn,calcIvfBtn,genTimeBtn;
     private Spinner startTimeSpin,endTimeSpin;
-    private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt,intakeTxt,outTxt,stoolTxt,urineTxt,ngtTxt;
+    private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt/*,intakeTxt,outTxt,stoolTxt,urineTxt,*/,ngtTxt;
     private TextView ageTxt;
     private View curView;
-    private TableLayout timeGrid;
+    private TableLayout timeGrid,stoolGrid;
     private PrintManager printManager;
     private RadioButton ivfRadioBtn,vsqRadioBtn,nevRadioBtn,medRadioBtn,noIvfRadioBtn,noVsqRadioBtn,noNevRadioBtn,noMedRadioBtn;
     private RadioGroup ivfRadioGroup,vsqRadioGroup, nebRadioGroup,medRadioGroup;
@@ -94,10 +90,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dSname.setText("Doe");
         dietTxt.setText("Apples and fruit");
         ccTxt.setText("12");
-        intakeTxt.setText("20");
+        /**intakeTxt.setText("20");
         outTxt.setText("30");
         stoolTxt.setText("40");
-        urineTxt.setText("20");
+        urineTxt.setText("20");*/
         ngtTxt.setText("30");
     }
 
@@ -110,7 +106,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         genTimeBtn = root.findViewById(R.id.tableBtn);
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
         ageTxt=root.findViewById(R.id.ageText);
+        //--------------------------------------------------
+        //Tables
         timeGrid = root.findViewById(R.id.timeTableLayout);
+        stoolGrid = root.findViewById(R.id.stoolTable);
+        //--------------------------------------------------
         roomTxt=root.findViewById(R.id.roomNoText);
         dateNowTxt=root.findViewById(R.id.nowDate);
         pName=root.findViewById(R.id.nameText);
@@ -120,10 +120,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dSname=root.findViewById(R.id.doctorSurname);
         dietTxt=root.findViewById(R.id.dietText);
         ccTxt=root.findViewById(R.id.ccText);
-        intakeTxt=root.findViewById(R.id.intakeTxt);
+        /*intakeTxt=root.findViewById(R.id.intakeTxt);
         outTxt=root.findViewById(R.id.outTakeTxt);
         stoolTxt=root.findViewById(R.id.stoolTxt);
-        urineTxt=root.findViewById(R.id.urineTxt);
+        urineTxt=root.findViewById(R.id.urineTxt);*/
         ngtTxt=root.findViewById(R.id.ngtTxt);
         //Radio Groups
         ivfRadioGroup=root.findViewById(R.id.ivfGroup);
@@ -371,22 +371,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         PrinterClass printerClass= new PrinterClass();
         List<String> normalDetails=setPrintDetails();
         //String[] tableDetails=null;
-        String[][] tableDetails=setPrintForTblDetails();
-        printerClass.printDocument(curView,printManager,normalDetails,tableDetails);
+        String[][] tableDetails=setPrintForTblDetails(0);
+        String[][] tableDetails2=setPrintForTblDetails(1);
+        printerClass.printDocument(curView,printManager,normalDetails,tableDetails,tableDetails2);
 
     }
 
-    private  String[][] setPrintForTblDetails()
+    private  String[][] setPrintForTblDetails(int tblCount)
     {
         //Sets single array for row data
         //Count for the first array size
-        int rowCount =timeGrid.getChildCount();
+        int rowCount;
+        if(tblCount==1)
+        {
+            rowCount =timeGrid.getChildCount();
+        }
+        else
+        {
+            rowCount =stoolGrid.getChildCount();
+        }
         //Setting single array
         String[] tableValues= new String[rowCount];
         for (int i=0;i<rowCount;i++)
         {
-            TableRow tableRow=(TableRow)timeGrid.getChildAt(i);
-            String[] tableColValues= new String[timeGrid.getChildCount()];
+            TableRow tableRow;
+            String[] tableColValues;
+            if(tblCount==0)
+            {
+                tableRow=(TableRow)timeGrid.getChildAt(i);
+                tableColValues= new String[timeGrid.getChildCount()];
+            }
+            else
+            {
+                tableRow=(TableRow)stoolGrid.getChildAt(i);
+                tableColValues= new String[stoolGrid.getChildCount()];
+            }
+
             for(int c=0;c<tableRow.getChildCount();c++)
             {
                 TextView a =(TextView)tableRow.getChildAt(c);
@@ -444,10 +464,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         col.add(dSname.getText().toString()+"-"+dSname.getHint()+":");
         col.add(dietTxt.getText().toString()+"-"+dietTxt.getHint()+":");
         col.add(ccTxt.getText().toString()+"-"+ccTxt.getHint());
-        col.add(intakeTxt.getText().toString()+" ml-"+intakeTxt.getHint()+":");
+        /*col.add(intakeTxt.getText().toString()+" ml-"+intakeTxt.getHint()+":");
         col.add(outTxt.getText().toString()+"ml-"+outTxt.getHint()+":");
         col.add(stoolTxt.getText().toString()+"ml-"+stoolTxt.getHint()+":");
-        col.add(urineTxt.getText().toString()+"ml-"+urineTxt.getHint()+":");
+        col.add(urineTxt.getText().toString()+"ml-"+urineTxt.getHint()+":");*/
         col.add(ngtTxt.getText().toString()+"ml-"+ngtTxt.getHint()+":");
         int ivfId=ivfRadioGroup.getCheckedRadioButtonId();
         int medId=medRadioGroup.getCheckedRadioButtonId();
@@ -524,12 +544,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         int rowsToGen=CalculateHours(sTime,eTime);
         List<String> rowsTimeValue=MakeTimeList(rowsToGen,sTime,eTime);
-        GenerateTable(view,rowsTimeValue);
+        GenerateTable(view,rowsTimeValue,0,6);
+        GenerateTable(view,rowsTimeValue,1,6);
     }
 
-    private void GenerateTable(View view,List<String>rowsTimeValue)
+    private void GenerateTable(View view,List<String>rowsTimeValue,int tablecount,int columnCount)
     {
-        CheckIfRows();
+        CheckIfRows(tablecount);
         ShapeDrawable sd = new ShapeDrawable();
         ShapeDrawable sdCol = new ShapeDrawable();
         ShapeDrawable inputSd = new ShapeDrawable();
@@ -545,7 +566,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             rws[i]=new TableRow(view.getContext());
             if(i==0)
             {
-                TextView[] headTxt=new TextView[6];
+                TextView[] headTxt=new TextView[columnCount];
                 for (int hT=0;hT<headTxt.length;hT++)
                 {
                     headTxt[hT]= new TextView(view.getContext());
@@ -554,11 +575,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     headTxt[hT].setGravity(Gravity.LEFT);
                 }
                 headTxt[0].setText(getResources().getString(R.string.timeTblHead));
-                headTxt[1].setText(getResources().getString(R.string.prTblHead));
-                headTxt[2].setText(getResources().getString(R.string.tempTblHead));
-                headTxt[3].setText(getResources().getString(R.string.bpTblHead));
-                headTxt[4].setText(getResources().getString(R.string.ivfTblHead));
-                headTxt[5].setText(getResources().getString(R.string.o2TblHead));
+                if(tablecount==0)
+                {
+                    headTxt[1].setText(getResources().getString(R.string.prTblHead));
+                    headTxt[2].setText(getResources().getString(R.string.tempTblHead));
+                    headTxt[3].setText(getResources().getString(R.string.bpTblHead));
+                    headTxt[4].setText(getResources().getString(R.string.ivfTblHead));
+                    headTxt[5].setText(getResources().getString(R.string.o2TblHead));
+                }
+                else
+                {
+
+                    headTxt[1].setText(getResources().getString(R.string.urineInTblHead));
+                    headTxt[2].setText(getResources().getString(R.string.urineOutTblHead));
+                    headTxt[3].setText(getResources().getString(R.string.stoolInTblHead));
+                    headTxt[4].setText(getResources().getString(R.string.waterCcTblHead));
+                    headTxt[5].setText(getResources().getString(R.string.milkCcTblHead));
+                }
                 for (int h=0;h<headTxt.length;h++)
                 {
                     rws[i].setBackground(sd);
@@ -566,7 +599,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     rws[i].addView(headTxt[h]);
                 }
                 //rws[i].setWeightSum(6);
-                timeGrid.addView(rws[i]);
+                switch ( tablecount)
+                {
+                    case 0:
+                    {
+                        timeGrid.addView(rws[i]);
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        stoolGrid.addView(rws[i]);
+                        break;
+                    }
+                }
+
             }
             else
             {
@@ -584,7 +631,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 for (int c=0;c<5;c++)
                 {
                     editTxt[c]= new EditText(view.getContext());
-                    editTxt[c].setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editTxt[c].setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editTxt[c].setHeight(150);
                     editTxt[c].setWidth(215);
                     editTxt[c].setGravity(Gravity.CENTER);
@@ -594,7 +641,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         editTxt[c].setBackground(input2Sd);
                     rws[i].addView(editTxt[c]);
                 }
-                timeGrid.addView(rws[i]);
+                switch ( tablecount)
+                {
+                    case 0:
+                    {
+                        timeGrid.addView(rws[i]);
+                        break;
+                    }
+                    case 1:
+                    {
+
+                        stoolGrid.addView(rws[i]);
+                        break;
+                    }
+                }
+
             }
         }
         genTimeBtn.setText("RECREATE TABLE");
@@ -639,12 +700,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         input2Sd.getPaint().setStyle(Paint.Style.STROKE);
     }
 
-    private void CheckIfRows()
+    private void CheckIfRows(int tableCount)
     {
-        int count=timeGrid.getChildCount();
-        if(count>0)
+        if(tableCount==0)
         {
-            timeGrid.removeAllViews();
+            int count=timeGrid.getChildCount();
+            if(count>0)
+            {
+                timeGrid.removeAllViews();
+            }
+        }
+        else
+        {
+            int count=stoolGrid.getChildCount();
+            if(count>0)
+            {
+                stoolGrid.removeAllViews();
+            }
         }
     }
 

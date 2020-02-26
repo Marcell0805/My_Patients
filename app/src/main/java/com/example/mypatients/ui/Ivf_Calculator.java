@@ -114,9 +114,10 @@ public class Ivf_Calculator extends AppCompatActivity
         if(hasAllValues)
         {
             int minutes= ConvertToMin(values);
-            int i=Integer.parseInt(values[0]);
-            int j=Integer.parseInt(values[3]);
-            int dripRate = (i*j ) / minutes;
+            int i=Integer.parseInt(values[0]);//Volume
+            int j=Integer.parseInt(values[3]);//Drip Rate
+            //int dripRate = (i*j ) / minutes;
+            int dripRate = (j* minutes) / i;
             String ivf=String.valueOf(dripRate);
             calcValueTxt.setText(ivf);
         }

@@ -5,40 +5,24 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
-import android.print.PrintManager;
 import android.print.PrintDocumentInfo;
+import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
-import android.graphics.pdf.PdfDocument;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class PrinterClass extends Activity
@@ -49,7 +33,7 @@ public class PrinterClass extends Activity
         super.onCreate(savedInstanceState);
     }
 
-    public void printDocument(View view, PrintManager printManager, List<String> normalDetails, String[][] tableDetails)
+    public void printDocument(View view, PrintManager printManager, List<String> normalDetails, String[][] details, String[][] tableDetails)
     {
         Context v= view.getContext();
         try
@@ -58,7 +42,7 @@ public class PrinterClass extends Activity
                     " Document";
 
             printManager.print(jobName, new
-                            MyPrintDocumentAdapter(v,normalDetails,tableDetails),
+                            MyPrintDocumentAdapter(v,normalDetails,tableDetails,details),
                     null);
         }
         catch (Exception c)
@@ -75,12 +59,13 @@ public class PrinterClass extends Activity
         public PdfDocument myPdfDocument;
         public int totalPages = 1;
         List<String> normalDetails;
-        String[][] tableDetails;
-        MyPrintDocumentAdapter(Context context, List<String> normalDetails, String[][] tableDetails)
+        String[][] tableDetails,tableDetails2;
+        MyPrintDocumentAdapter(Context context, List<String> normalDetails, String[][] details, String[][] tableDetails)
         {
             this.context = context;
             this.normalDetails=normalDetails;
             this.tableDetails=tableDetails;
+            this.tableDetails2=details;
         }
         @Override
         public void onLayout(PrintAttributes printAttributes,
@@ -134,7 +119,7 @@ public class PrinterClass extends Activity
                         myPdfDocument = null;
                         return;
                     }
-                    drawPage(page, i,normalDetails,tableDetails);
+                    drawPage(page, i,normalDetails,tableDetails,tableDetails2);
                     myPdfDocument.finishPage(page);
                 }
             }
@@ -165,7 +150,7 @@ public class PrinterClass extends Activity
         return false;
     }
     private void drawPage(PdfDocument.Page page,
-                          int pagenumber, List<String> normalDetails, String[][] tableDetails)
+                          int pagenumber, List<String> normalDetails, String[][] tableDetails, String[][] details)
     {
         //-------------------------------------------------------------------
         //Font Settings and colors
@@ -224,77 +209,85 @@ public class PrinterClass extends Activity
                 k=0;
             }
         }
+        int ttI=1;
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(1);
         //paint.setStyle(Paint.Style.STROKE);
         //-------------------------------------------------------------------
         //Creation of auto-size table points
         //-------------------------------------------------------------------
-        int colCountTotal=tableDetails[0].length;
-        int yStartPoint=leftMargin;
-        int recLength=0;
-        int xStartPoint=LineSpace+30;
-        int recWidth=colCountTotal*70;
-        LineSpace=LineSpace+30;
-        leftMargin=leftMargin+5;
-        LineSpace=LineSpace + 10;
-
-        //-------------------------------------------------------------------
-        //Creating table
-        //-------------------------------------------------------------------
-        int colWidth=(recWidth/tableDetails[0].length);
-        colWidth=colWidth+20;
-        int rows=tableDetails.length;
-        int curXstartPoint=LineSpace;
-        int recTotalWidth=0;
-
-        paint.setStyle(Paint.Style.STROKE);
-        for(int l=0;l<rows;l++)
+        for(int tablesTotal=0;tablesTotal<=ttI;tablesTotal++)
         {
-            recLength=LineSpace;
-            paint.setTypeface(plain);
-            //paint.setTypeface(bold);
-            paint.setTextSize(10);
-            canvas.drawText(tableDetails[l][0], leftMargin, LineSpace, paint);
-            int cWidth=colWidth;
-            int cCount=tableDetails[l].length;
-            //paint.setColor(Color.parseColor("#FFCA79FF"));
-            canvas.drawRect(yStartPoint,LineSpace,colWidth,curXstartPoint,paint);
-            for(int c=0;c<cCount;c++)
+            int colCountTotal=tableDetails[0].length;
+            int yStartPoint=leftMargin;
+            int recLength=0;
+            int xStartPoint=LineSpace+30;
+            int recWidth=colCountTotal*70;
+            LineSpace=LineSpace+30;
+            leftMargin=leftMargin+5;
+            LineSpace=LineSpace + 10;
+            if(tablesTotal>0)
             {
-                //paint.setStyle(Paint.Style.STROKE);
-                paint.setColor(Color.BLACK);
-                paint.setTextSize(10);
-                if(c==0)
-                {
-
-                    paint.setTypeface(plain);
-                    c++;
-                    canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace-1, paint);
-                }
-                else
-                {
-                    paint.setTypeface(plain);
-                    canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace, paint);
-
-                }
-                for(int b=1;b<=cCount;b++)
-                {
-                    paint.setStyle(Paint.Style.STROKE);
-                    canvas.drawRect(colWidth*b,xStartPoint,90,LineSpace,paint);
-                    recTotalWidth=colWidth*b;
-                }
-                //paint.setStyle(Paint.Style.STROKE);
-                //cWidth=cWidth+60;
+                tableDetails=details;
             }
-            if(l!=rows)
-                LineSpace=LineSpace + 20;
 
+            //-------------------------------------------------------------------
+            //Creating table
+            //-------------------------------------------------------------------
+            int colWidth=(recWidth/tableDetails[0].length);
+            colWidth=colWidth+20;
+            int rows=tableDetails.length;
+            int curXstartPoint=LineSpace;
+            int recTotalWidth=0;
+
+            paint.setStyle(Paint.Style.STROKE);
+            for(int l=0;l<rows;l++)
+            {
+                recLength=LineSpace;
+                paint.setTypeface(plain);
+                //paint.setTypeface(bold);
+                paint.setTextSize(10);
+                canvas.drawText(tableDetails[l][0], leftMargin, LineSpace, paint);
+                int cWidth=colWidth;
+                int cCount=tableDetails[l].length;
+                //paint.setColor(Color.parseColor("#FFCA79FF"));
+                canvas.drawRect(yStartPoint,LineSpace,colWidth,curXstartPoint,paint);
+                for(int c=0;c<cCount;c++)
+                {
+                    //paint.setStyle(Paint.Style.STROKE);
+                    paint.setColor(Color.BLACK);
+                    paint.setTextSize(10);
+                    if(c==0)
+                    {
+
+                        paint.setTypeface(plain);
+                        c++;
+                        canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace-1, paint);
+                    }
+                    else
+                    {
+                        paint.setTypeface(plain);
+                        canvas.drawText(tableDetails[l][c], (cWidth*c)+2, LineSpace, paint);
+
+                    }
+                    for(int b=1;b<=cCount;b++)
+                    {
+                        paint.setStyle(Paint.Style.STROKE);
+                        canvas.drawRect(colWidth*b,xStartPoint,90,LineSpace,paint);
+                        recTotalWidth=colWidth*b;
+                    }
+                    //paint.setStyle(Paint.Style.STROKE);
+                    //cWidth=cWidth+60;
+                }
+                if(l!=rows)
+                    LineSpace=LineSpace + 20;
+
+            }
+            //paint.setColor(Color.BLACK);
+
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(yStartPoint,xStartPoint,recTotalWidth,recLength,paint);
         }
-        //paint.setColor(Color.BLACK);
-
-        paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(yStartPoint,xStartPoint,recTotalWidth,recLength,paint);
     }
 
 }
