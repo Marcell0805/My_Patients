@@ -29,30 +29,42 @@
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/roomNoText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="6"
-                    android:layout_weight="1"
-                    android:layout_gravity="start"
-                    android:inputType="textPersonName"
-                    android:hint="@string/roomNoTxt"
-                    android:nextFocusRight="@id/nowDate"/>
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_weight="15"
-                    android:layout_height="match_parent"></Space>
-                <EditText
-                    android:id="@+id/nowDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="6"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:inputType="datetime"
-                    android:hint="Today's Date"
-                    android:nextFocusDown="@id/nameText"/>
+                    android:hint="@string/roomNoTxt"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/roomNoText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="6"
+                        android:hint="@string/roomNoTxt"
+                        android:inputType="textPersonName|textCapSentences|textEmailAddress|textCapWords"
+                        android:nextFocusRight="@id/nowDate" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:hint="@string/dateNowTxt"
+                    android:layout_weight="1">
+                    <EditText
+                        android:id="@+id/nowDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="6"
+                        android:inputType="datetime"
+                        android:hint="@string/dateNowTxt"
+                        android:nextFocusDown="@id/nameText"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -69,113 +81,202 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/Relative">
-                <EditText
-                    android:id="@+id/nameText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="@string/pName"
-                    android:nextFocusRight="@id/surnameText"
-                    android:autofillHints=""/>
-                <!--android:text="@{Patients.setPatientName()??Name}"-->
-                <EditText
-                    android:id="@+id/surnameText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:hint="@string/pSurname"
-                    android:inputType="textPersonName"
-                    android:layout_alignParentRight="true"
-                    android:nextFocusDown="@id/dateBirthText"
-                    android:autofillHints=""/>
-                <EditText
-                    android:id="@+id/dateBirthText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/nameText"
-                    android:hint="@string/dobText"
-                    android:inputType="datetime"
-                    android:nextFocusRight="@id/ageText"
-                    android:autofillHints=""/>
-                <EditText
-                    android:id="@+id/ageText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/surnameText"
-                    android:hint="@string/age"
-                    android:inputType="number"
-                    android:layout_alignParentRight="true"
-                    android:nextFocusDown="@id/doctorName"
-                    android:autofillHints=""/>
+                    android:id="@+id/patientSurname">
+                    <EditText
+                        android:id="@+id/surnameText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="7"
+                        android:hint="@string/pSurname"
+                        android:inputType="textPersonName"
+                        android:nextFocusDown="@id/dateBirthText"
+                        android:autofillHints=""/>
 
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:hint="@string/pName"
+                    android:id="@+id/patientName">
+
+                    <EditText
+                        android:id="@+id/nameText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:autofillHints=""
+                        android:ems="6"
+                        android:hint="@string/pName"
+                        android:inputType="textPersonName|textCapSentences"
+                        android:nextFocusRight="@id/surnameText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--******************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:id="@+id/patientDob"
+                    android:hint="@string/dobText"
+                    android:layout_below="@+id/patientName">
+
+                    <EditText
+                        android:id="@+id/dateBirthText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:autofillHints=""
+                        android:ems="6"
+                        android:hint="@string/dobText"
+                        android:inputType="datetime"
+                        android:nextFocusRight="@id/ageText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:hint="@string/age"
+                    android:layout_below="@+id/patientSurname"
+                    android:id="@+id/ageFloat">
+                    <EditText
+                        android:id="@+id/ageText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="7"
+                        android:hint="@string/age"
+                        android:inputType="number"
+                        android:nextFocusDown="@id/doctorName"
+                        android:autofillHints=""/>
+
+                </com.google.android.material.textfield.TextInputLayout>
                 <Space
                     android:id="@+id/patientSpace"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@+id/ageText"
+                    android:layout_below="@+id/patientDob"
                     android:background="@color/Headings"/>
-
-                <EditText
-                    android:id="@+id/doctorName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/patientSpace"
-                    android:inputType="textPersonName"
-                    android:nextFocusRight="@id/doctorSurname"
+                <!--*****************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:id="@+id/docName"
                     android:hint="@string/doctorName"
-                    android:autofillHints=""/>
+                    android:layout_below="@+id/patientDob">
 
-                <EditText
-                    android:id="@+id/doctorSurname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/patientSpace"
-                    android:inputType="textPersonName"
+                    <EditText
+                        android:id="@+id/doctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:autofillHints=""
+                        android:ems="6"
+                        android:hint="@string/doctorName"
+                        android:inputType="textPersonName|textCapSentences|textEmailAddress"
+                        android:nextFocusRight="@id/doctorSurname" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/ageFloat"
                     android:hint="@string/doctorSName"
-                    android:nextFocusDown="@id/dietText"
-                    android:autofillHints=""/>
+                    android:id="@+id/docSurname">
 
-                <EditText
-                    android:id="@+id/dietText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/doctorSurname"
-                    android:inputType="textPersonName"
+                    <EditText
+                        android:id="@+id/doctorSurname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:autofillHints=""
+                        android:ems="7"
+                        android:hint="@string/doctorSName"
+                        android:inputType="textPersonName|textCapSentences"
+                        android:nextFocusDown="@id/dietText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--***************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:id="@+id/dietFloat"
                     android:hint="@string/dietTxt"
-                    android:autofillHints=""
-                    android:nextFocusDown="@id/ccText"/>
+                    android:layout_below="@+id/docName">
 
-                <EditText
-                    android:id="@+id/ccText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:layout_below="@+id/dietText"
-                    android:text='@{Patient.getCC()}'
+                    <EditText
+                        android:id="@+id/dietText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:autofillHints=""
+                        android:ems="6"
+                        android:hint="@string/dietTxt"
+                        android:inputType="textPersonName|textCapSentences"
+                        android:nextFocusDown="@id/ccText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/docSurname"
                     android:hint="@string/ccTxt"
-                    android:autofillHints=""
-                    android:nextFocusDown="@id/hasIvfRadio"/>
+                    android:id="@+id/ccFloat">
+                    <EditText
+                        android:id="@+id/ccText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="7"
+                        android:text='@{Patient.getCC()}'
+                        android:inputType="number"
+                        android:hint="@string/ccTxt"
+                        android:autofillHints=""
+                        android:nextFocusDown="@id/hasIvfRadio"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--***************************************************************-->
+
                 <Button
-                    android:layout_below="@id/dietText"
+                    android:layout_below="@id/dietFloat"
                     android:background="@color/MainBtnColor"
                     android:id="@+id/ivfCalcBtn"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
                     android:text="@string/calcIvfBtn" />
 
                 <Space
                     android:id="@+id/radioSpaceTop"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@+id/ccText"
+                    android:layout_below="@+id/ivfCalcBtn"
                     android:background="@color/Headings" />
 
                 <TextView
@@ -384,54 +485,115 @@
                     android:id="@+id/spaceLayout"
                     android:orientation="horizontal"
                     android:background="@color/Headings"></LinearLayout>
-
-                <EditText
-                    android:id="@+id/intakeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/spaceAfterGen"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:inputType="number"
+                <!--***************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:id="@+id/intakeFloat"
                     android:hint="@string/intakeTxt"
-                    android:autofillHints=""/>
+                    android:layout_below="@+id/spaceLayout">
+                    <EditText
+                        android:id="@+id/intakeTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:ems="6"
+                        android:inputType="number"
+                        android:hint="@string/intakeTxt"
+                        android:autofillHints=""
+                        android:nextFocusDown="@id/ccText"/>
 
-                <EditText
-                    android:id="@+id/outTakeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/spaceAfterGen"
-                    android:inputType="number"
-                    android:layout_alignParentRight="true"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/spaceLayout"
                     android:hint="@string/outtakeTxt"
-                    android:autofillHints=""/>
-                <EditText
-                    android:id="@+id/urineTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_below="@+id/outTakeTxt"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="@string/urineTxt"
-                    android:autofillHints=""/>
+                    android:id="@+id/outTakeFloat">
+                    <EditText
+                        android:id="@+id/outTakeTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="7"
+                        android:inputType="number"
+                        android:layout_alignParentRight="true"
+                        android:hint="@string/outtakeTxt"
+                        android:autofillHints=""
+                        android:nextFocusDown="@id/hasIvfRadio"/>
 
-                <EditText
-                    android:id="@+id/stoolTxt"
-                    android:layout_below="@+id/outTakeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--********************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:hint="@string/urineTxt"
+                    android:id="@+id/urineFloat"
+                    android:layout_below="@+id/intakeFloat">
+                    <EditText
+                        android:id="@+id/urineTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:ems="6"
+                        android:inputType="number"
+                        android:hint="@string/urineTxt"
+                        android:nextFocusDown="@id/ccText"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/intakeFloat"
                     android:hint="@string/stoolTxt"
-                    android:autofillHints=""
-                    android:layout_alignParentRight="true"/>
-                <EditText
-                    android:id="@+id/ngtTxt"
-                    android:layout_below="@+id/stoolTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
+                    android:id="@+id/stoolFloat">
+                    <EditText
+                        android:id="@+id/stoolTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:ems="7"
+                        android:inputType="number"
+                        android:hint="@string/stoolTxt"
+                        android:autofillHints=""
+                        android:nextFocusDown="@id/hasIvfRadio"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+                <!--***************************************************************-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/stoolFloat"
                     android:hint="@string/ngtBtnTxt"
-                    android:autofillHints=""
-                    android:layout_alignParentLeft="true"/>
+                    android:id="@+id/ngtFloat">
+                    <EditText
+                        android:id="@+id/ngtTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="6"
+                        android:inputType="number"
+                        android:hint="@string/ngtBtnTxt"
+                        android:autofillHints=""
+                        android:nextFocusDown="@id/hasIvfRadio"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/printBtn"
@@ -440,7 +602,7 @@
                     android:text="@string/printBtnTxt"
                     android:layout_centerInParent="true"
                     android:background="@color/MainBtnColor"
-                    android:layout_below="@id/ngtTxt"/>
+                    android:layout_below="@id/ngtFloat"/>
 
 
             </RelativeLayout>

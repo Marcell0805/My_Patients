@@ -167,6 +167,11 @@ public class PrinterClass extends Activity
     private void drawPage(PdfDocument.Page page,
                           int pagenumber, List<String> normalDetails, String[][] tableDetails)
     {
+        //-------------------------------------------------------------------
+        //Font Settings and colors
+        //-------------------------------------------------------------------
+        Typeface plain=Typeface.DEFAULT;
+        Typeface bold= Typeface.defaultFromStyle(Typeface.BOLD);
 
         String[][] splitL= new String[normalDetails.size()][2];
         normalDetails.toArray(new String[normalDetails.size() * 2]);
@@ -202,15 +207,19 @@ public class PrinterClass extends Activity
             {
                 LineSpace=LineSpace + 15;
                 paint.setTextSize(10);
+                paint.setTypeface(bold);
                 canvas.drawText(splitL[l][1], leftMargin, LineSpace, paint);
+                paint.setTypeface(plain);
                 paint.setTextSize(8);
                 canvas.drawText(splitL[l][0],leftMargin+150,LineSpace,paint);
                 k=1;
             }
             else {
+                paint.setTypeface(bold);
                 paint.setTextSize(10);
                 canvas.drawText(splitL[l][1], leftMargin+350, LineSpace, paint);
                 paint.setTextSize(8);
+                paint.setTypeface(plain);
                 canvas.drawText(splitL[l][0], leftMargin + 470, LineSpace, paint);
                 k=0;
             }
@@ -229,12 +238,7 @@ public class PrinterClass extends Activity
         LineSpace=LineSpace+30;
         leftMargin=leftMargin+5;
         LineSpace=LineSpace + 10;
-        //-------------------------------------------------------------------
-        //Font Settings and colors
-        //-------------------------------------------------------------------
-        k=0;
-        Typeface plain=Typeface.DEFAULT;
-        Typeface bold= Typeface.defaultFromStyle(Typeface.BOLD);
+
         //-------------------------------------------------------------------
         //Creating table
         //-------------------------------------------------------------------
@@ -243,6 +247,8 @@ public class PrinterClass extends Activity
         int rows=tableDetails.length;
         int curXstartPoint=LineSpace;
         int recTotalWidth=0;
+
+        paint.setStyle(Paint.Style.STROKE);
         for(int l=0;l<rows;l++)
         {
             recLength=LineSpace;

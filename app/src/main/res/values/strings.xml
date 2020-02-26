@@ -92,4 +92,5 @@
     <string name="i_amp_oq"><![CDATA[I & Oq]]></string>
     <string name="radioGroupHead">Select the relative:</string>
     <string name="nav_barSubHead">Welcome back!</string>
+    <string name="dateNowTxt">Today\'s Date</string>
 </resources>
