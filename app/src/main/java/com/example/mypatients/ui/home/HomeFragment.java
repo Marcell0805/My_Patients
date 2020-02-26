@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         /*
         If Testing Uncomment below method
          */
-        setTestValues();
+        //setTestValues();
 
         curView=root;
         printManager = (PrintManager) getActivity()
