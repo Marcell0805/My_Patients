@@ -28,10 +28,10 @@
     <string name="dietTxt">Diet</string>
     <string name="ccTxt">CC : </string>
     <string name="tableGenBtn">Create Table</string>
-    <string name="intakeTxt">Intake</string>
-    <string name="outtakeTxt">Outtake</string>
-    <string name="urineTxt">Urine</string>
-    <string name="stoolTxt">Stool</string>
+    <string name="urineIntakeTxt">Urine Intake</string>
+    <string name="urineOuttakeTxt">Urine Output</string>
+    <string name="stoolIntakeTxt">Stool Intake</string>
+    <string name="stoolOutputTxt">Stool Output</string>
     <string name="printBtnTxt">Print</string>
     <string name="emailBtnTxt">Email</string>
     <string name="ngtBtnTxt">NGT</string>
@@ -44,6 +44,12 @@
     <string name="bpTblHead">BP</string>
     <string name="ivfTblHead">IVF</string>
     <string name="o2TblHead">O2</string>
+
+    <string name="urineInTblHead">Urine Input</string>
+    <string name="urineOutTblHead">Urine Output</string>
+    <string name="stoolInTblHead">Stool</string>
+    <string name="waterCcTblHead">Water CC</string>
+    <string name="milkCcTblHead">Milk CC</string>
 
     <string-array name="dateTblGenList">
         <item>0:00</item>
@@ -80,7 +86,8 @@
     <string name="mlTxt">Volume ml</string>
     <string name="calcTimeMinTxt">Time in Minutes</string>
     <string name="calcTimeHourTxt">Time in hours</string>
-    <string name="calcDripRateTxt">Drip Rate</string>
+    <string name="calcDripRateTxt">IV Flow rate</string>
+    <string name="dropFactorTxt">Flow/ Drop Factor</string>
     <string name="calcValue">Calculated Value</string>
     <string name="without_neb">Without Neb</string>
     <string name="with_neb">With Neb</string>

@@ -269,6 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_centerInParent="true"
+                    android:layout_marginBottom="@dimen/button_spaceBot"
                     android:gravity="center"
                     android:text="@string/calcIvfBtn" />
 
@@ -439,6 +440,7 @@
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
+                        android:layout_marginBottom="@dimen/button_spaceBot"
                         android:text="@string/tableGenBtn" />
                     <Space
                         android:layout_width="10dp"
@@ -468,6 +470,44 @@
                     </TableLayout>
 
                 </HorizontalScrollView>
+                <Space
+
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/appBgColor"
+                    android:layout_below="@id/tableScroll"
+                    android:id="@+id/spaceSpace">
+                </Space>
+                <Space
+
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/Headings"
+                    android:layout_below="@id/spaceSpace"
+                    android:id="@+id/spaceAfterGen">
+                </Space>
+                <LinearLayout
+                    android:layout_below="@id/spaceAfterGen"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/stoolSpaceLayout"
+                    android:orientation="horizontal"
+                    android:background="@color/Headings"></LinearLayout>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/stoolHorizontal"
+                    android:layout_below="@id/stoolSpaceLayout">
+                    <TableLayout
+                        android:layout_below="@id/stoolHorizontal"
+                        android:orientation="horizontal"
+                        android:id="@+id/stoolTable"
+                        android:layout_width="match_parent"
+                        android:background="@color/tableBgColor"
+                        android:layout_height="wrap_content">
+
+                    </TableLayout>
+                </HorizontalScrollView>
 
 
                 <Space
@@ -475,125 +515,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:background="@color/Headings"
-                    android:layout_below="@id/tableScroll"
-                    android:id="@+id/spaceAfterGen">
+                    android:layout_below="@id/stoolHorizontal"
+                    android:id="@+id/spaceStoolGen">
                 </Space>
                 <LinearLayout
-                    android:layout_below="@id/spaceAfterGen"
+                    android:layout_below="@id/spaceStoolGen"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:id="@+id/spaceLayout"
                     android:orientation="horizontal"
                     android:background="@color/Headings"></LinearLayout>
                 <!--***************************************************************-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:id="@+id/intakeFloat"
-                    android:hint="@string/intakeTxt"
-                    android:layout_below="@+id/spaceLayout">
-                    <EditText
-                        android:id="@+id/intakeTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:ems="6"
-                        android:inputType="number"
-                        android:hint="@string/intakeTxt"
-                        android:autofillHints=""
-                        android:nextFocusDown="@id/ccText"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:layout_below="@+id/spaceLayout"
-                    android:hint="@string/outtakeTxt"
-                    android:id="@+id/outTakeFloat">
-                    <EditText
-                        android:id="@+id/outTakeTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:ems="7"
-                        android:inputType="number"
-                        android:layout_alignParentRight="true"
-                        android:hint="@string/outtakeTxt"
-                        android:autofillHints=""
-                        android:nextFocusDown="@id/hasIvfRadio"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-                <!--********************************************************************-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:hint="@string/urineTxt"
-                    android:id="@+id/urineFloat"
-                    android:layout_below="@+id/intakeFloat">
-                    <EditText
-                        android:id="@+id/urineTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:ems="6"
-                        android:inputType="number"
-                        android:hint="@string/urineTxt"
-                        android:nextFocusDown="@id/ccText"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:layout_below="@+id/intakeFloat"
-                    android:hint="@string/stoolTxt"
-                    android:id="@+id/stoolFloat">
-                    <EditText
-                        android:id="@+id/stoolTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:ems="7"
-                        android:inputType="number"
-                        android:hint="@string/stoolTxt"
-                        android:autofillHints=""
-                        android:nextFocusDown="@id/hasIvfRadio"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-
 
 
                 <!--***************************************************************-->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:layout_below="@+id/stoolFloat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:layout_below="@+id/spaceLayout"
+                android:hint="@string/ngtBtnTxt"
+                android:id="@+id/ngtFloat">
+                <EditText
+                    android:id="@+id/ngtTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="6"
+                    android:inputType="number"
                     android:hint="@string/ngtBtnTxt"
-                    android:id="@+id/ngtFloat">
-                    <EditText
-                        android:id="@+id/ngtTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="6"
-                        android:inputType="number"
-                        android:hint="@string/ngtBtnTxt"
-                        android:autofillHints=""
-                        android:nextFocusDown="@id/hasIvfRadio"/>
+                    android:autofillHints=""
+                    android:nextFocusDown="@id/hasIvfRadio"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
                 <Button
                     android:id="@+id/printBtn"
@@ -602,6 +559,7 @@
                     android:text="@string/printBtnTxt"
                     android:layout_centerInParent="true"
                     android:background="@color/MainBtnColor"
+                    android:layout_marginBottom="@dimen/button_spaceBot"
                     android:layout_below="@id/ngtFloat"/>
 
 
