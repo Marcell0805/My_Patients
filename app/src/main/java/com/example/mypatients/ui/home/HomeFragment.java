@@ -1,6 +1,7 @@
 package com.example.mypatients.ui.home;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
@@ -28,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.mypatients.Data.DatabaseHelper;
 import com.example.mypatients.PrinterClass;
 import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
@@ -47,7 +49,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
-    private Button printbtn,calcIvfBtn,genTimeBtn;
+    private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn;
     private Spinner startTimeSpin,endTimeSpin;
     private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt/*,intakeTxt,outTxt,stoolTxt,urineTxt,*/,ngtTxt;
     private TextView ageTxt;
@@ -66,8 +68,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         /*
         If Testing Uncomment below method
          */
-        //setTestValues();
-
+        setTestValues();
+        DatabaseHelper helper= new DatabaseHelper(root.getContext());
+        helper.CreateSQLHelpers(root.getContext());
+        SQLiteDatabase db= helper.getReadableDatabase();
         curView=root;
         printManager = (PrintManager) getActivity()
                 .getSystemService(root.getContext().PRINT_SERVICE);
@@ -90,10 +94,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dSname.setText("Doe");
         dietTxt.setText("Apples and fruit");
         ccTxt.setText("12");
-        /**intakeTxt.setText("20");
-        outTxt.setText("30");
-        stoolTxt.setText("40");
-        urineTxt.setText("20");*/
         ngtTxt.setText("30");
     }
 
@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         startTimeSpin=root.findViewById(R.id.startTime);
         endTimeSpin=root.findViewById(R.id.endTime);
         printbtn=root.findViewById(R.id.printBtn);
+        saveBtn=root.findViewById(R.id.saveBtn);
         calcIvfBtn= root.findViewById(R.id.ivfCalcBtn);
         genTimeBtn = root.findViewById(R.id.tableBtn);
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
@@ -184,6 +185,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InsertData();
+            }
+        });
         calcIvfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,7 +211,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         else
             return false;
     }
+    private boolean hasRequiredSaveFields()
+    {
+        boolean hasRequired=true;
+        boolean hasdateAge=false;
+        List<String> values=setPrintDetails();
+        String[] splitL= setSaveDetails().toArray(new String[0]);
 
+        for(int i=0;i<splitL.length;i++)
+        {
+            if(splitL[i].toLowerCase().contains(getResources().getString(R.string.dobText).toLowerCase())||splitL[i].contains(getResources().getString(R.string.age).toLowerCase()))
+            {
+                if(!splitL[i].equals(""))
+                    hasdateAge=true;
+                else if(!hasdateAge)
+                    hasdateAge=false;
+            }
+            else
+            {
+                if(splitL[0].equals(""))
+                    hasRequired=false;
+            }
+        }
+        if(hasRequired&&hasdateAge)
+            return  hasRequired;
+        return  false;
+    }
     private boolean hasFields()
     {
         boolean hasRequired=true;
@@ -370,11 +402,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         PrinterClass printerClass= new PrinterClass();
         List<String> normalDetails=setPrintDetails();
-        //String[] tableDetails=null;
         String[][] tableDetails=setPrintForTblDetails(0);
         String[][] tableDetails2=setPrintForTblDetails(1);
         printerClass.printDocument(curView,printManager,normalDetails,tableDetails,tableDetails2);
-
     }
 
     private  String[][] setPrintForTblDetails(int tblCount)
@@ -444,11 +474,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     break;
             }
         }
-
-
-        //return tableValues;
-
         return tableDetails;
+    }
+    private  String[]setSaveForTblDetails(int tblCount)
+    {
+        //Sets single array for row data
+        //Count for the first array size
+        int rowCount;
+        int columnCount;
+        int Index=0;
+        if(tblCount==1)
+        {
+            rowCount =timeGrid.getChildCount();
+        }
+        else
+        {
+            rowCount =stoolGrid.getChildCount();
+        }
+        TableRow tableRowC=(TableRow)timeGrid.getChildAt(0);
+        int rowCountNoHeader=rowCount-1;
+        int arraySize=tableRowC.getChildCount()*rowCountNoHeader;
+        //Setting single array
+        String[] tableValues= new String[arraySize];
+        for (int i=1;i<rowCount;i++)
+        {
+            TableRow tableRow;
+            if(tblCount==0)
+            {
+                tableRow=(TableRow)timeGrid.getChildAt(i);
+            }
+            else
+            {
+                tableRow=(TableRow)stoolGrid.getChildAt(i);
+            }
+
+            for(int c=0;c<tableRow.getChildCount();c++)
+            {
+                TextView a =(TextView)tableRow.getChildAt(c);
+                String b=a.getText().toString();
+                tableValues[Index]=b;
+                Index++;
+            }
+        }
+        return tableValues;
     }
 
     private List<String> setPrintDetails()
@@ -464,17 +532,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         col.add(dSname.getText().toString()+"-"+dSname.getHint()+":");
         col.add(dietTxt.getText().toString()+"-"+dietTxt.getHint()+":");
         col.add(ccTxt.getText().toString()+"-"+ccTxt.getHint());
-        /*col.add(intakeTxt.getText().toString()+" ml-"+intakeTxt.getHint()+":");
-        col.add(outTxt.getText().toString()+"ml-"+outTxt.getHint()+":");
-        col.add(stoolTxt.getText().toString()+"ml-"+stoolTxt.getHint()+":");
-        col.add(urineTxt.getText().toString()+"ml-"+urineTxt.getHint()+":");*/
         col.add(ngtTxt.getText().toString()+"ml-"+ngtTxt.getHint()+":");
         int ivfId=ivfRadioGroup.getCheckedRadioButtonId();
         int medId=medRadioGroup.getCheckedRadioButtonId();
         int vsqId=vsqRadioGroup.getCheckedRadioButtonId();
         int nebId=nebRadioGroup.getCheckedRadioButtonId();
 
-
+        //region Radio Buttons
         if(ivfId==-1)
         {
             //col.add("-:");
@@ -523,6 +587,78 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         {
             col.add("Yes"+"-"+noNevRadioBtn.getText()+":");
         }
+        //endregion
+        return col;
+    }
+    private List<String> setSaveDetails()
+    {
+        List<String> col=new ArrayList<>();
+        col.add(roomTxt.getText().toString());
+        col.add(dateNowTxt.getText().toString());
+        col.add(pName.getText().toString());
+        col.add(pSname.getText().toString());
+        col.add(dateOfBirthTxt.getText().toString());
+        col.add(ageTxt.getText().toString());
+        col.add(dName.getText().toString());
+        col.add(dSname.getText().toString());
+        col.add(dietTxt.getText().toString());
+        col.add(ccTxt.getText().toString());
+        col.add(ngtTxt.getText().toString());
+        int ivfId=ivfRadioGroup.getCheckedRadioButtonId();
+        int medId=medRadioGroup.getCheckedRadioButtonId();
+        int vsqId=vsqRadioGroup.getCheckedRadioButtonId();
+        int nebId=nebRadioGroup.getCheckedRadioButtonId();
+
+        //region Radio Buttons
+        if(ivfId==-1)
+        {
+            col.add("");
+        }
+        else if(ivfId==ivfRadioBtn.getId())
+        {
+            col.add(ivfRadioBtn.getText().toString());
+        }
+        else
+        {
+            col.add(noIvfRadioBtn.getText().toString());
+        }
+        if(medId==-1)
+        {
+            col.add("");
+        }
+        else if(medId==medRadioBtn.getId())
+        {
+            col.add(medRadioBtn.getText().toString());
+        }
+        else
+        {
+            col.add(noMedRadioBtn.getText().toString());
+        }
+        if(vsqId==-1)
+        {
+            col.add("");
+        }
+        else if(vsqId==vsqRadioBtn.getId())
+        {
+            col.add(vsqRadioBtn.getText().toString());
+        }
+        else
+        {
+            col.add(noVsqRadioBtn.getText().toString());
+        }
+        if(nebId==-1)
+        {
+            col.add("");
+        }
+        else if(nebId==nevRadioBtn.getId())
+        {
+            col.add(nevRadioBtn.getText().toString());
+        }
+        else
+        {
+            col.add(noNevRadioBtn.getText().toString());
+        }
+        //endregion
         return col;
     }
 
@@ -738,5 +874,60 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         int rows=(eTime-sTime);
         return rows;
+    }
+
+    private void InsertData()
+    {
+        String[]tableD = setSaveForTblDetails(0);
+        String[]tableIn = setSaveForTblDetails(1);
+        String[] patientDetails= setSaveDetails().toArray(new String[0]);
+
+        //int Index=0;
+
+
+
+        /*String[][] tableDetails=setPrintForTblDetails(0);
+        for (int td=0;td<tableDetails.length;td++)
+        {
+            for(int c=0;c<tableDetails[td].length;c++)
+            {
+                if(c<tableDetails[td].length)
+                    tableD[Index]=tableDetails[td][c];
+                else
+                    break;
+                Index++;
+            }
+        }
+        Index=0;
+        String[][] tableDetails2=setPrintForTblDetails(1);
+        for (int td=0;td<tableDetails2.length;td++)
+        {
+            for(int c=0;c<tableDetails2[td].length;c++)
+            {
+                if(c<tableDetails2[td].length)
+                    tableIn[Index]=tableDetails2[td][c];
+                else
+                    break;
+                Index++;
+            }
+        }
+        Index=0;
+        //String[][] splitL= new String[normalDetails.size()][2];
+        patientValues.toArray(new String[patientValues.size() * 2]);
+        String[]a;
+        for(int i=0;i<patientValues.size();i++)
+        {
+            String s=patientValues.get(i);
+            a=s.split("-");
+            patientDetails[Index]=a[0];
+            Index++;
+        }*/
+
+    }
+    private void UpdateData()
+    {
+        List<String> patientValues=setPrintDetails();
+        String[][] tableDetails=setPrintForTblDetails(0);
+        String[][] tableDetails2=setPrintForTblDetails(1);
     }
 }

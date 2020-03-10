@@ -33,6 +33,7 @@
     <string name="stoolIntakeTxt">Stool Intake</string>
     <string name="stoolOutputTxt">Stool Output</string>
     <string name="printBtnTxt">Print</string>
+    <string name="saveBtnTxt">Save</string>
     <string name="emailBtnTxt">Email</string>
     <string name="ngtBtnTxt">NGT</string>
     <string name="calcIvfBtn">Calculate IVF</string>

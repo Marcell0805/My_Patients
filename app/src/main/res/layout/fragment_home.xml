@@ -551,16 +551,34 @@
 
 
 
-
-                <Button
-                    android:id="@+id/printBtn"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/printBtnTxt"
+                    android:id="@+id/buttonsLayout"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/ngtFloat"
                     android:layout_centerInParent="true"
-                    android:background="@color/MainBtnColor"
-                    android:layout_marginBottom="@dimen/button_spaceBot"
-                    android:layout_below="@id/ngtFloat"/>
+                    >
+                    <Button
+                        android:id="@+id/saveBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/saveBtnTxt"
+                        android:layout_margin="@dimen/button_spaceBot"
+                        android:layout_centerInParent="true"
+                        android:background="@color/MainBtnColor"
+                        android:layout_marginBottom="@dimen/button_spaceBot"
+                        android:layout_below="@id/ngtFloat"/>
+                    <Button
+                        android:id="@+id/printBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/printBtnTxt"
+                        android:background="@color/MainBtnColor"
+                        android:layout_margin="@dimen/button_spaceBot"
+                        android:layout_marginBottom="@dimen/button_spaceBot"
+                        android:layout_below="@id/ngtFloat"/>
+                </LinearLayout>
 
 
             </RelativeLayout>
