@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.print.PrintManager;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.example.mypatients.databinding.FragmentHomeBinding;
 import com.example.mypatients.ui.Ivf_Calculator;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Console;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -216,7 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         boolean hasRequired=true;
         boolean hasdateAge=false;
         List<String> values=setPrintDetails();
-        String[] splitL= setSaveDetails().toArray(new String[0]);
+        String[] splitL= setSaveDetails();
 
         for(int i=0;i<splitL.length;i++)
         {
@@ -590,20 +592,120 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //endregion
         return col;
     }
-    private List<String> setSaveDetails()
+    private String[] setSaveDetails()
     {
+        Boolean isValid=true;
         List<String> col=new ArrayList<>();
-        col.add(roomTxt.getText().toString());
-        col.add(dateNowTxt.getText().toString());
-        col.add(pName.getText().toString());
-        col.add(pSname.getText().toString());
-        col.add(dateOfBirthTxt.getText().toString());
-        col.add(ageTxt.getText().toString());
-        col.add(dName.getText().toString());
-        col.add(dSname.getText().toString());
-        col.add(dietTxt.getText().toString());
-        col.add(ccTxt.getText().toString());
-        col.add(ngtTxt.getText().toString());
+        String roomNum=roomTxt.getText().toString();
+        if(TextUtils.isEmpty(roomNum))
+        {
+            roomTxt.setError("Please Enter a Room Number.");
+            isValid=false;
+        }
+        else
+            col.add(roomNum);
+        String captureDate=dateNowTxt.getText().toString();
+        if(TextUtils.isEmpty(captureDate))
+        {
+            dateNowTxt.setError("Please Enter Today's Date.");
+            isValid=false;
+        }
+        else
+            col.add(captureDate);
+        String patientName=pName.getText().toString();
+        if(TextUtils.isEmpty(patientName))
+        {
+            pName.setError("Please Enter The Patient's Name.");
+            isValid=false;
+        }
+        else
+            col.add(patientName);
+        String patientSurName=pSname.getText().toString();
+        if(TextUtils.isEmpty(patientSurName))
+        {
+            pSname.setError("Please Enter The Patient's Surname.");
+            isValid=false;
+        }
+        else
+            col.add(patientSurName);
+
+        String dobString=dateOfBirthTxt.getText().toString();
+        String ageString =ageTxt.getText().toString();
+        boolean isDate=true;
+        try
+        {
+            SimpleDateFormat dateFormat= new SimpleDateFormat("YYYY/MM/DD");
+            Date ofBirth=dateFormat.parse(dobString);
+
+        }
+        catch (ParseException e)
+        {
+            isDate=false;
+        }
+
+        if(!isDate && ageString.equals(""))
+        {
+            String Error="Please Enter Date Of Birth Or Age";
+            dateOfBirthTxt.setError(Error);
+            ageTxt.setError(Error);
+
+            isValid=false;
+        }
+        else
+        {
+            col.add(dateOfBirthTxt.getText().toString());
+            col.add(ageTxt.getText().toString());
+        }
+        String docName=dName.getText().toString();
+        if(TextUtils.isEmpty(docName))
+        {
+            dName.setError("Please Enter Doctor Name.");
+            isValid=false;
+        }
+        else
+        {
+            col.add(docName);
+        }
+        String docSurname=dSname.getText().toString();
+        if(TextUtils.isEmpty(docSurname))
+        {
+            dSname.setError("Please Enter Doctor Surname.");
+            isValid=false;
+        }
+        else
+        {
+            col.add(docSurname);
+        }
+        String diet=dietTxt.getText().toString();
+        if(TextUtils.isEmpty(diet))
+        {
+            dietTxt.setError("Please Enter Diet.");
+            isValid=false;
+        }
+        else
+        {
+            col.add(diet);
+        }
+        String ccString=ccTxt.getText().toString();
+        if(TextUtils.isEmpty(ccString))
+        {
+            ccTxt.setError("Please Enter CC.");
+            isValid=false;
+        }
+        else
+        {
+            col.add(ccString);
+        }
+        String ngtString=ngtTxt.getText().toString();
+        if(TextUtils.isEmpty(ngtString))
+        {
+            ngtTxt.setError("Please Enter NGT.");
+            isValid=false;
+        }
+        else
+        {
+            col.add(ngtString);
+        }
         int ivfId=ivfRadioGroup.getCheckedRadioButtonId();
         int medId=medRadioGroup.getCheckedRadioButtonId();
         int vsqId=vsqRadioGroup.getCheckedRadioButtonId();
@@ -616,11 +718,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(ivfId==ivfRadioBtn.getId())
         {
-            col.add(ivfRadioBtn.getText().toString());
+            col.add(String.valueOf(ivfRadioBtn.getId()));
         }
         else
         {
-            col.add(noIvfRadioBtn.getText().toString());
+            col.add(String.valueOf(ivfRadioBtn.getId()));
         }
         if(medId==-1)
         {
@@ -628,11 +730,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(medId==medRadioBtn.getId())
         {
-            col.add(medRadioBtn.getText().toString());
+            col.add(String.valueOf(medRadioBtn.getId()));
         }
         else
         {
-            col.add(noMedRadioBtn.getText().toString());
+            col.add(String.valueOf(medRadioBtn.getId()));
         }
         if(vsqId==-1)
         {
@@ -640,11 +742,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(vsqId==vsqRadioBtn.getId())
         {
-            col.add(vsqRadioBtn.getText().toString());
+            col.add(String.valueOf(vsqRadioBtn.getId()));
         }
         else
         {
-            col.add(noVsqRadioBtn.getText().toString());
+            col.add(String.valueOf(vsqRadioBtn.getId()));
         }
         if(nebId==-1)
         {
@@ -652,14 +754,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else if(nebId==nevRadioBtn.getId())
         {
-            col.add(nevRadioBtn.getText().toString());
+            col.add(String.valueOf(nevRadioBtn.getId()));
         }
         else
         {
-            col.add(noNevRadioBtn.getText().toString());
+            col.add(String.valueOf(nevRadioBtn.getId()));
         }
         //endregion
-        return col;
+        if(isValid)
+            return col.toArray(new String[0]);
+        else
+            return null;
     }
 
     private void StartGenerateTable(View view)
@@ -878,52 +983,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void InsertData()
     {
-        String[]tableD = setSaveForTblDetails(0);
-        String[]tableIn = setSaveForTblDetails(1);
-        String[] patientDetails= setSaveDetails().toArray(new String[0]);
-
-        //int Index=0;
-
-
-
-        /*String[][] tableDetails=setPrintForTblDetails(0);
-        for (int td=0;td<tableDetails.length;td++)
+        if(timeGrid.getChildCount()==0)
+            Toast.makeText(curView.getContext(),"Please Generate The Tables", Toast.LENGTH_LONG).show();
+        else
         {
-            for(int c=0;c<tableDetails[td].length;c++)
+
+            String[]tableD = setSaveForTblDetails(0);
+            String[]tableIn = setSaveForTblDetails(1);
+            String[] patientDetails= setSaveDetails();
+            if(patientDetails!=null)
             {
-                if(c<tableDetails[td].length)
-                    tableD[Index]=tableDetails[td][c];
-                else
-                    break;
-                Index++;
+                try
+                {
+                    DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+                    helper.CreateSQLHelpers(curView.getContext());
+                    long idP=helper.CreatePatient(patientDetails);
+                    tableD[6]=String.valueOf(idP);
+                    tableIn[6]=String.valueOf(idP);
+                    helper.CreatePatientTime(tableD);
+                    helper.CreatePatientIntake(tableIn);
+                }
+                catch (Exception ex)
+                {
+                    String error= ex.getMessage();
+                    Toast.makeText(curView.getContext(),error,Toast.LENGTH_LONG).show();
+                }
+                AfterSave();
             }
+            else
+                Toast.makeText(curView.getContext(),"Missing Data", Toast.LENGTH_LONG).show();
+
         }
-        Index=0;
-        String[][] tableDetails2=setPrintForTblDetails(1);
-        for (int td=0;td<tableDetails2.length;td++)
-        {
-            for(int c=0;c<tableDetails2[td].length;c++)
-            {
-                if(c<tableDetails2[td].length)
-                    tableIn[Index]=tableDetails2[td][c];
-                else
-                    break;
-                Index++;
-            }
-        }
-        Index=0;
-        //String[][] splitL= new String[normalDetails.size()][2];
-        patientValues.toArray(new String[patientValues.size() * 2]);
-        String[]a;
-        for(int i=0;i<patientValues.size();i++)
-        {
-            String s=patientValues.get(i);
-            a=s.split("-");
-            patientDetails[Index]=a[0];
-            Index++;
-        }*/
+
+
 
     }
+
+    private void AfterSave() {
+        Toast.makeText(curView.getContext(),"The patient details have been saved", Toast.LENGTH_LONG).show();
+        saveBtn.setText("Update");
+    }
+
     private void UpdateData()
     {
         List<String> patientValues=setPrintDetails();
