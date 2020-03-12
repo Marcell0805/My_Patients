@@ -156,15 +156,96 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         long patient_id=db.insert(PatientIntake.TABLE_NAME,null,value);
     }
-    public int GetPatientId()
+    //Update Section
+    public void UpdatePatient(String[] values,String idToUpdate)
     {
-        String[] projection={Patient.Column_patientId};
-        String select =Patient.Column_patientId+" = ?";
-        String[] selectionArgs={""};
-        Cursor c= db.query(Patient.TABLE_NAME,projection,select,selectionArgs,null,null,null);
-        c.moveToLast();
-        int Id=c.getInt(0);
-        return Id;
+        String[] args ={idToUpdate};
+        ContentValues value= new ContentValues();
+        value.put(Patient.Column_roomNum ,values[0]);
+        value.put(Patient.Column_captureDate,values[1]);
+        value.put(Patient.Column_patientName ,values[2]);
+        value.put(Patient.Column_patientSurname,values[3]);
+        value.put(Patient.Column_dateOfBirth ,values[4]);
+        value.put(Patient.Column_age ,values[5]);
+
+        value.put(Patient.Column_doctorName,values[6]);
+        value.put(Patient.Column_doctorSurname,values[7]);
+        value.put(Patient.Column_diet ,values[8]);
+        value.put(Patient.Column_cc ,values[9]);
+        value.put(Patient.Column_ngt ,values[10]);
+
+
+        value.put(Patient.Column_hasIvf ,values[11]);
+        value.put(Patient.Column_hasMedication,values[12]);
+        value.put(Patient.Column_hasVsq,values[13]);
+        value.put(Patient.Column_hasNeb ,values[14]);
+
+
+        long timeTbl_id=db.update(Patient.TABLE_NAME,value,Patient.Column_patientId +" =?",args);
+    }
+    public void UpdatePatientTime(String[] values,String idToUpdate)
+    {
+        String[] args ={idToUpdate};
+        ContentValues value= new ContentValues();
+        value.put(PatientTime.Column_timePeriod,values[0]);
+        value.put(PatientTime.Column_pulseRate ,values[1]);
+        value.put(PatientTime.Column_temperature,values[2]);
+        value.put(PatientTime.Column_bloodPressure ,values[3]);
+        value.put(PatientTime.Column_ivf ,values[4]);
+        value.put(PatientTime.Column_oxygen,values[5]);
+
+        long timeTbl_id=db.update(PatientTime.TABLE_NAME,value,PatientTime.Column_patientId +" =?",args);
+    }
+    public void UpdatePatientPatientIntake(String[] values,String idToUpdate)
+    {
+        String[] args ={idToUpdate};
+        ContentValues value= new ContentValues();
+        value.put(PatientIntake.Column_timePeriod,values[0]);
+        value.put(PatientIntake.Column_urineInput ,values[1]);
+        value.put(PatientIntake.Column_urineOutput,values[2]);
+        value.put(PatientIntake.Column_stoolInput,values[3]);
+        value.put(PatientIntake.Column_waterIn,values[4]);
+        value.put(PatientIntake.Column_milkIn ,values[5]);
+
+        long timeTbl_id=db.update(PatientIntake.TABLE_NAME,value,PatientIntake.Column_patientId +" =?",args);
+    }
+    //End Update Section
+    public String GetPatientId(String[] searchValues)
+    {
+        String[] columns={Patient.Column_patientId,
+                Patient.Column_patientName,
+                Patient.Column_patientSurname,
+                Patient.Column_age,
+                Patient.Column_roomNum};
+
+        String where =Patient.Column_patientName + "=?"+ " and " +
+                Patient.Column_patientSurname+ "=?"+ " and " +
+                Patient.Column_age+ "=?" + " and " +
+                Patient.Column_roomNum+ "=?";
+
+        /*String where =Patient.Column_patientName + "="+'"'+searchValues[0]+'"'+ " and " +
+                Patient.Column_patientSurname+ "="+'"'+searchValues[1]+'"'+ " and " +
+                Patient.Column_age+ "="+'"'+searchValues[2]+'"'+ " and " +
+                Patient.Column_roomNum+ "="+'"'+searchValues[3]+'"';*/
+
+        String[] selectionArgs=new String[]{searchValues[0],searchValues[1],searchValues[2],searchValues[3]};
+        try
+        {
+            Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            int count= cursor.getCount();
+            String ids="";
+            while(cursor.moveToNext())
+            {
+                ids= cursor.getString(0);
+            }
+
+            return ids;
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return "";
     }
     public void GetByPatientDetails()
     {

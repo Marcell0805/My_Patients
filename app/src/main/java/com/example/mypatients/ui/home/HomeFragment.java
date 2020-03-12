@@ -73,12 +73,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         setTestValues();
         DatabaseHelper helper= new DatabaseHelper(root.getContext());
         helper.CreateSQLHelpers(root.getContext());
-        SQLiteDatabase db= helper.getReadableDatabase();
+        //SQLiteDatabase db= helper.getReadableDatabase();
+        //String I=helper.GetPatientId(new String[]{"Marcell", "van Niekerk", "23", "Room 1"});
         curView=root;
         printManager = (PrintManager) getActivity()
                 .getSystemService(root.getContext().PRINT_SERVICE);
         SetDefaultValues(root);
-
         //Patient patient= new Patient();
         //binding.setPatients(patient);
         return root;
@@ -123,10 +123,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dSname=root.findViewById(R.id.doctorSurname);
         dietTxt=root.findViewById(R.id.dietText);
         ccTxt=root.findViewById(R.id.ccText);
-        /*intakeTxt=root.findViewById(R.id.intakeTxt);
-        outTxt=root.findViewById(R.id.outTakeTxt);
-        stoolTxt=root.findViewById(R.id.stoolTxt);
-        urineTxt=root.findViewById(R.id.urineTxt);*/
         ngtTxt=root.findViewById(R.id.ngtTxt);
         //Radio Groups
         ivfRadioGroup=root.findViewById(R.id.ivfGroup);
@@ -170,8 +166,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         printbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Bitmap a=createBitmapFromView(view);
-                //PrintDetails();
                 if(hasFields())
                 {
                     if(hasTable())
@@ -213,7 +207,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         else
             return false;
     }
-    private boolean hasRequiredSaveFields()
+    /*private boolean hasRequiredSaveFields()
     {
         boolean hasRequired=true;
         boolean hasdateAge=false;
@@ -238,7 +232,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if(hasRequired&&hasdateAge)
             return  hasRequired;
         return  false;
-    }
+    }*/
     private boolean hasFields()
     {
         boolean hasRequired=true;
@@ -344,12 +338,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     if (clean.length() < 8){
                         clean = clean + dateFormat.substring(clean.length());
-                    }else{
-                        //This part makes sure that when we finish entering numbers
-                        //the date is correct, fixing it otherwise
-                        //int day  = Integer.parseInt(clean.substring(0,2));
-                        //int mon  = Integer.parseInt(clean.substring(2,4));
-                        //int year = Integer.parseInt(clean.substring(4,8));
+                    }
+                    else{
                         int year = Integer.parseInt(clean.substring(0,4));
                         int mon  = Integer.parseInt(clean.substring(4,6));
                         int day  = Integer.parseInt(clean.substring(6,8));
@@ -1018,16 +1008,59 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     }
+    private void UpdateData()
+    {
+        if(timeGrid.getChildCount()==0)
+            Toast.makeText(curView.getContext(),"Please Generate The Tables", Toast.LENGTH_LONG).show();
+        else
+        {
+
+            String[]tableD = setSaveForTblDetails(0);
+            String[]tableIn = setSaveForTblDetails(1);
+            String[] patientDetails= setSaveDetails();
+            String[] searchIdList= new String[5];
+            searchIdList[0]=patientDetails[2];
+            searchIdList[1]=patientDetails[3];
+            searchIdList[2]=patientDetails[5];
+            searchIdList[3]=patientDetails[0];
+
+            if(patientDetails!=null)
+            {
+                /*
+        value.put(Patient.Column_patientName ,values[2]);
+        value.put(Patient.Column_patientSurname,values[3]);
+        value.put(Patient.Column_age ,values[5]);
+                value.put(Patient.Column_roomNum ,values[0]);
+                * */
+                try
+                {
+                    DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+                    helper.CreateSQLHelpers(curView.getContext());
+                    String IdForUpdate=helper.GetPatientId(searchIdList);
+                    helper.UpdatePatient(patientDetails,IdForUpdate);
+
+
+                    helper.UpdatePatientTime(tableD,IdForUpdate);
+                    helper.UpdatePatientPatientIntake(tableIn,IdForUpdate);
+                }
+                catch (Exception ex)
+                {
+                    String error= ex.getMessage();
+                    Toast.makeText(curView.getContext(),error,Toast.LENGTH_LONG).show();
+                }
+                AfterSave();
+            }
+            else
+                Toast.makeText(curView.getContext(),"Missing Data", Toast.LENGTH_LONG).show();
+
+        }
+
+
+
+    }
 
     private void AfterSave() {
         Toast.makeText(curView.getContext(),"The patient details have been saved", Toast.LENGTH_LONG).show();
         saveBtn.setText("Update");
-    }
-
-    private void UpdateData()
-    {
-        List<String> patientValues=setPrintDetails();
-        String[][] tableDetails=setPrintForTblDetails(0);
-        String[][] tableDetails2=setPrintForTblDetails(1);
     }
 }
