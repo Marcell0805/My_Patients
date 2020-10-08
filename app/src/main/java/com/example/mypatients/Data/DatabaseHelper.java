@@ -13,6 +13,7 @@ import com.example.mypatients.Data.MyPatients.PatientTime;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper
@@ -76,7 +77,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        try
+        db.execSQL(TABLE_PATIENTS_CREATE);
+        db.execSQL(TABLE_PatientIntake_CREATE);
+        db.execSQL(TABLE_PatientTime_CREATE);
+        /*try
         {
             db.execSQL(TABLE_PATIENTS_CREATE);
             db.execSQL(TABLE_PatientIntake_CREATE);
@@ -86,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         {
             String a= e.toString();
 
-        }
+        }*/
     }
 
     @Override
@@ -210,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         long timeTbl_id=db.update(PatientIntake.TABLE_NAME,value,PatientIntake.Column_patientId +" =?",args);
     }
     //End Update Section
-    public String GetPatientId(String[] searchValues)
+    public String GetPatientId(String[] searchValues,boolean justId)
     {
         String[] columns={Patient.Column_patientId,
                 Patient.Column_patientName,
@@ -220,15 +224,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         String where =Patient.Column_patientName + "=?"+ " and " +
                 Patient.Column_patientSurname+ "=?"+ " and " +
-                Patient.Column_age+ "=?" + " and " +
-                Patient.Column_roomNum+ "=?";
+                Patient.Column_age+ " LIKE ?" + " and " +
+                Patient.Column_roomNum+ " LIKE ?";
 
-        /*String where =Patient.Column_patientName + "="+'"'+searchValues[0]+'"'+ " and " +
-                Patient.Column_patientSurname+ "="+'"'+searchValues[1]+'"'+ " and " +
-                Patient.Column_age+ "="+'"'+searchValues[2]+'"'+ " and " +
-                Patient.Column_roomNum+ "="+'"'+searchValues[3]+'"';*/
-
-        String[] selectionArgs=new String[]{searchValues[0],searchValues[1],searchValues[2],searchValues[3]};
+        String[] selectionArgs=new String[]{searchValues[0],searchValues[1],"%"+searchValues[2]+"%","%"+searchValues[3]+"%"};
         try
         {
             Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
@@ -247,8 +246,83 @@ public class DatabaseHelper extends SQLiteOpenHelper
         }
         return "";
     }
-    public void GetByPatientDetails()
+    public List<Object> GetByPatientId(int PatientId)
     {
 
+        String[] columns={Patient.Column_patientId,
+                Patient.Column_patientName,
+                Patient.Column_patientSurname,
+                Patient.Column_age,
+                Patient.Column_roomNum};
+
+        String where =Patient.Column_patientId + "=?";
+        String[] selectionArgs=new String[]{String.valueOf(PatientId)};
+        final List<Object> patientList= new ArrayList<>();
+        try
+        {
+            Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            final int idIndex = cursor.getColumnIndex(Patient.Column_patientId);
+            final int nameIndex = cursor.getColumnIndex(Patient.Column_patientName);
+            final int surnameIndex = cursor.getColumnIndex(Patient.Column_patientSurname);
+            final int ageIndex = cursor.getColumnIndex(Patient.Column_age);
+            final int roomIndex = cursor.getColumnIndex(Patient.Column_roomNum);
+
+            if (!cursor.moveToFirst()) {
+                return new ArrayList<>();
+            }
+
+            /*while(cursor.moveToNext())
+            {
+                final int id = cursor.getInt(idIndex);
+                final String  pName = cursor.getString(nameIndex);
+                final String  pSname = cursor.getString(surnameIndex);
+                final int pAge = cursor.getInt(ageIndex);
+                final int roomNumber = cursor.getInt(roomIndex);
+            }*/
+            do {
+                int id = cursor.getInt(idIndex);
+                String  pName = cursor.getString(nameIndex);
+                String  pSname = cursor.getString(surnameIndex);
+                int pAge = cursor.getInt(ageIndex);
+                int roomNumber = cursor.getInt(roomIndex);
+                patientList.add(id);
+                patientList.add(pName);
+                patientList.add(pSname);
+                patientList.add(pAge);
+                patientList.add(roomNumber);
+
+            }while(cursor.moveToNext());
+
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return  patientList;
+    }
+    public void GetAllPatients()
+    {
+        String[] columns={Patient.Column_patientId,
+                Patient.Column_patientName,
+                Patient.Column_patientSurname,
+                Patient.Column_age,
+                Patient.Column_roomNum};
+        try
+        {
+            Cursor cursor= db.query(Patient.TABLE_NAME,columns,null,null,null,null,null);
+            int count= cursor.getCount();
+            String ids="";
+            while(cursor.moveToNext())
+            {
+                ids= cursor.getString(0);
+            }
+
+            //return ids;
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        //return "";
     }
 }

@@ -16,6 +16,42 @@
             android:focusable="true"
             android:background="@color/appBgColor"
             android:focusableInTouchMode="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/toolbarLayout"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/AddNewPatientBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:background="@color/MainBtnColor"
+                        android:text="Add New Patient"
+                        android:textSize="8sp"></Button>
+
+                    <Button
+                        android:id="@+id/GetPatientBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/MainBtnColor"
+                        android:text="Find Patient"
+                        android:textSize="8sp"></Button>
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
             <TextView
                 android:id="@+id/headingView"
                 android:layout_height="@dimen/headingMain"
@@ -28,7 +64,8 @@
             <LinearLayout
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -242,7 +279,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    android:layout_weight="1"
                     android:layout_below="@+id/docSurname"
                     android:hint="@string/ccTxt"
                     android:id="@+id/ccFloat">

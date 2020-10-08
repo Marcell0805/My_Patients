@@ -29,6 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mypatients.Data.DatabaseHelper;
 import com.example.mypatients.PrinterClass;
@@ -48,10 +49,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment  {
 
     private FragmentHomeBinding binding;
-    private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn;
+    private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn,loadBtn,addNewBtn;
     private Spinner startTimeSpin,endTimeSpin;
     private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt/*,intakeTxt,outTxt,stoolTxt,urineTxt,*/,ngtTxt;
     private TextView ageTxt;
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private PrintManager printManager;
     private RadioButton ivfRadioBtn,vsqRadioBtn,nevRadioBtn,medRadioBtn,noIvfRadioBtn,noVsqRadioBtn,noNevRadioBtn,noMedRadioBtn;
     private RadioGroup ivfRadioGroup,vsqRadioGroup, nebRadioGroup,medRadioGroup;
+    private boolean addNewPressed=false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -79,6 +81,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         printManager = (PrintManager) getActivity()
                 .getSystemService(root.getContext().PRINT_SERVICE);
         SetDefaultValues(root);
+        TestData();
+
         //Patient patient= new Patient();
         //binding.setPatients(patient);
         return root;
@@ -103,10 +107,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         startTimeSpin=root.findViewById(R.id.startTime);
         endTimeSpin=root.findViewById(R.id.endTime);
+        //------------------------------------------
+        //Buttons
+        //------------------------------------------
         printbtn=root.findViewById(R.id.printBtn);
         saveBtn=root.findViewById(R.id.saveBtn);
         calcIvfBtn= root.findViewById(R.id.ivfCalcBtn);
         genTimeBtn = root.findViewById(R.id.tableBtn);
+        addNewBtn= root.findViewById(R.id.AddNewPatientBtn);
+        loadBtn= root.findViewById(R.id.GetPatientBtn);
+        //--------------------------------------------
         dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
         ageTxt=root.findViewById(R.id.ageText);
         //--------------------------------------------------
@@ -199,6 +209,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 StartGenerateTable(view);
             }
         });
+
+        addNewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResetUI();
+            }
+        });
+        loadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void ResetUI()
+    {
+        addNewPressed=true;
+        roomTxt.setText("");
+        dateNowTxt.setText("");
+        pName.setText("");
+        pSname.setText("");
+        dateOfBirthTxt.setText("");
+        ageTxt.setText("");
+        dName.setText("");
+        dSname.setText("");
+        dietTxt.setText("");
+        ccTxt.setText("");
+        ngtTxt.setText("");
+        ivfRadioGroup.clearCheck();
+        medRadioGroup.clearCheck();
+        vsqRadioGroup.clearCheck();
+        nebRadioGroup.clearCheck();
+        SetDefaultValues(curView);
+        CheckIfRows(0);
+        CheckIfRows(1);
+
     }
 
     private boolean hasTable() {
@@ -233,6 +280,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             return  hasRequired;
         return  false;
     }*/
+    //Check to ensure all required fields have data
     private boolean hasFields()
     {
         boolean hasRequired=true;
@@ -324,48 +372,60 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!charSequence.toString().equals(current)) {
-                    String clean = charSequence.toString().replaceAll("[^\\d.]|\\.", "");
-                    String cleanC = current.replaceAll("[^\\d.]|\\.", "");
-
-                    int cl = clean.length();
-                    int sel = cl;
-                    for (int a = 2; a <= cl && a < 6; a += 2) {
-                        sel++;
-                    }
-                    //Fix for pressing delete next to a forward slash
-                    if (clean.equals(cleanC)) sel--;
-
-                    if (clean.length() < 8){
-                        clean = clean + dateFormat.substring(clean.length());
-                    }
-                    else{
-                        int year = Integer.parseInt(clean.substring(0,4));
-                        int mon  = Integer.parseInt(clean.substring(4,6));
-                        int day  = Integer.parseInt(clean.substring(6,8));
-
-                        mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
-                        cal.set(Calendar.MONTH, mon-1);
-                        year = (year<1900)?1900:(year>2100)?2100:year;
-                        cal.set(Calendar.YEAR, year);
-                        // ^ first set year for the line below to work correctly
-                        //with leap years - otherwise, date e.g. 29/02/2012
-                        //would be automatically corrected to 28/02/2012
-
-                        day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
-                        //clean = String.format("%02d%02d%02d",day, mon, year);
-                        clean = String.format("%02d%02d%02d",year, mon, day);
-                    }
-
-                    clean = String.format("%s/%s/%s", clean.substring(0, 4),
-                            clean.substring(4, 6),
-                            clean.substring(6, 8));
-
-                    sel = sel < 0 ? 0 : sel;
-                    current = clean;
-                    dateOfBirthTxt.setText(current);
-                    dateOfBirthTxt.setSelection(sel < current.length() ? sel : current.length());
+                if(addNewPressed)
+                {
+                    addNewPressed=false;
                 }
+                else
+                {
+                    if (!charSequence.toString().equals(current))
+                    {
+                        SetDateFormat(charSequence);
+                    }
+                }
+            }
+
+            private void SetDateFormat(CharSequence charSequence) {
+                String clean = charSequence.toString().replaceAll("[^\\d.]|\\.", "");
+                String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                int cl = clean.length();
+                int sel = cl;
+                for (int a = 2; a <= cl && a < 6; a += 2) {
+                    sel++;
+                }
+                //Fix for pressing delete next to a forward slash
+                if (clean.equals(cleanC)) sel--;
+
+                if (clean.length() < 8){
+                    clean = clean + dateFormat.substring(clean.length());
+                }
+                else{
+                    int year = Integer.parseInt(clean.substring(0,4));
+                    int mon  = Integer.parseInt(clean.substring(4,6));
+                    int day  = Integer.parseInt(clean.substring(6,8));
+
+                    mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                    cal.set(Calendar.MONTH, mon-1);
+                    year = (year<1900)?1900:(year>2100)?2100:year;
+                    cal.set(Calendar.YEAR, year);
+                    // ^ first set year for the line below to work correctly
+                    //with leap years - otherwise, date e.g. 29/02/2012
+                    //would be automatically corrected to 28/02/2012
+
+                    day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                    //clean = String.format("%02d%02d%02d",day, mon, year);
+                    clean = String.format("%02d%02d%02d",year, mon, day);
+                }
+
+                clean = String.format("%s/%s/%s", clean.substring(0, 4),
+                        clean.substring(4, 6),
+                        clean.substring(6, 8));
+
+                sel = sel < 0 ? 0 : sel;
+                current = clean;
+                dateOfBirthTxt.setText(current);
+                dateOfBirthTxt.setSelection(sel < current.length() ? sel : current.length());
             }
 
             @Override
@@ -384,12 +444,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         genTimeBtn.setText("CREATE TABLE");
     }
 
-
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(view.getContext(),"Click event fired", Toast.LENGTH_SHORT).show();
-
-    }
     private void PrintDetails()
     {
         PrinterClass printerClass= new PrinterClass();
@@ -970,6 +1024,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         int rows=(eTime-sTime);
         return rows;
     }
+    //---------------------------------------------------------------------------------------------------------------------
+    // DATABASE METHODS
+    //---------------------------------------------------------------------------------------------------------------------
 
     private void InsertData()
     {
@@ -1004,9 +1061,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(curView.getContext(),"Missing Data", Toast.LENGTH_LONG).show();
 
         }
-
-
-
+    }
+    private void GetAllPatients()
+    {
+        DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+        helper.CreateSQLHelpers(curView.getContext());
+        //helper.UpdatePatient();
+    }
+    private void GetSelectedPatient(Integer PatientId)
+    {
+        DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+        helper.CreateSQLHelpers(curView.getContext());
+    }
+    private void TestData()
+    {
+        DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+        helper.CreateSQLHelpers(curView.getContext());
+        String[] searchIdList= new String[5];
+        searchIdList[0]="Marcell";
+        searchIdList[1]="van Niekerk";
+        searchIdList[2]="";
+        searchIdList[3]="Room 1";
+        String IdForUpdate=helper.GetPatientId(searchIdList,false);
+        List<Object> items=helper.GetByPatientId(1);
+        String Name= String.valueOf(items.get(1));
     }
     private void UpdateData()
     {
@@ -1026,17 +1104,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             if(patientDetails!=null)
             {
-                /*
-        value.put(Patient.Column_patientName ,values[2]);
-        value.put(Patient.Column_patientSurname,values[3]);
-        value.put(Patient.Column_age ,values[5]);
-                value.put(Patient.Column_roomNum ,values[0]);
-                * */
                 try
                 {
                     DatabaseHelper helper= new DatabaseHelper(curView.getContext());
                     helper.CreateSQLHelpers(curView.getContext());
-                    String IdForUpdate=helper.GetPatientId(searchIdList);
+                    String IdForUpdate=helper.GetPatientId(searchIdList,false);
                     helper.UpdatePatient(patientDetails,IdForUpdate);
 
 
