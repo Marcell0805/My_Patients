@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="stateHidden">
-        <activity android:name=".Data.GetPatient"></activity>
+        <!--<activity android:name=".ListView"></activity>-->
+        <activity android:name=".PatientSearch" />
         <activity
             android:name=".ui.Ivf_Calculator"
             android:label="@string/title_activity_ivf__calculator"

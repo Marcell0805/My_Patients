@@ -29,9 +29,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mypatients.Data.DatabaseHelper;
+import com.example.mypatients.FragmentArg;
+import com.example.mypatients.PatientSearch;
 import com.example.mypatients.PrinterClass;
 import com.example.mypatients.R;
 import com.example.mypatients.databinding.FragmentHomeBinding;
@@ -49,10 +52,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment  {
-
+public class HomeFragment extends Fragment
+{
+    public  boolean activeCalled =false;
     private FragmentHomeBinding binding;
-    private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn,loadBtn,addNewBtn;
+    private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn,addNewBtn,searchBtn;
     private Spinner startTimeSpin,endTimeSpin;
     private EditText dateOfBirthTxt,roomTxt,dateNowTxt,pName,pSname,dName,dSname,dietTxt,ccTxt/*,intakeTxt,outTxt,stoolTxt,urineTxt,*/,ngtTxt;
     private TextView ageTxt;
@@ -61,6 +65,7 @@ public class HomeFragment extends Fragment  {
     private PrintManager printManager;
     private RadioButton ivfRadioBtn,vsqRadioBtn,nevRadioBtn,medRadioBtn,noIvfRadioBtn,noVsqRadioBtn,noNevRadioBtn,noMedRadioBtn;
     private RadioGroup ivfRadioGroup,vsqRadioGroup, nebRadioGroup,medRadioGroup;
+    public String id;
     private boolean addNewPressed=false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,6 +74,7 @@ public class HomeFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         binding=FragmentHomeBinding.inflate(inflater);
         SetListeners(root);
+        activeCalled=false;
         /*
         If Testing Uncomment below method
          */
@@ -82,10 +88,35 @@ public class HomeFragment extends Fragment  {
                 .getSystemService(root.getContext().PRINT_SERVICE);
         SetDefaultValues(root);
         TestData();
-
-        //Patient patient= new Patient();
-        //binding.setPatients(patient);
         return root;
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode)
+    {
+        super.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==999)
+        {
+            Bundle result= data.getExtras();
+            String a = result.getString("PatientId");
+            setPatientData(a);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        activeCalled=true;
     }
 
     private void setTestValues()
@@ -115,9 +146,8 @@ public class HomeFragment extends Fragment  {
         calcIvfBtn= root.findViewById(R.id.ivfCalcBtn);
         genTimeBtn = root.findViewById(R.id.tableBtn);
         addNewBtn= root.findViewById(R.id.AddNewPatientBtn);
-        loadBtn= root.findViewById(R.id.GetPatientBtn);
+        searchBtn=root.findViewById(R.id.GetPatientBtn);
         //--------------------------------------------
-        dateOfBirthTxt= root.findViewById(R.id.dateBirthText);
         ageTxt=root.findViewById(R.id.ageText);
         //--------------------------------------------------
         //Tables
@@ -203,6 +233,12 @@ public class HomeFragment extends Fragment  {
                 showIvfCal(view);
             }
         });
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSearch();
+            }
+        });
         genTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,12 +250,6 @@ public class HomeFragment extends Fragment  {
             @Override
             public void onClick(View v) {
                 ResetUI();
-            }
-        });
-        loadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -320,6 +350,29 @@ public class HomeFragment extends Fragment  {
     {
         Intent ivfCalc= new Intent(getActivity(), Ivf_Calculator.class);
         getActivity().startActivity(ivfCalc);
+    }
+    private void showSearch()
+    {
+        Intent patientSearch= new Intent(getActivity(), PatientSearch.class);
+        startActivityForResult(patientSearch,999);
+    }
+    public void setPatientData(String id)
+    {
+        int aId=Integer.parseInt(id);
+        DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+        helper.CreateSQLHelpers(curView.getContext());
+        List<Object> patientDetails=helper.GetByPatientId(aId);
+        List<Object> patientIntake=helper.GetPatientIntake(aId);
+        List<Object> patientTime=helper.GetPatientTime(aId);
+        String[] timeRange=patientTime.get(5).toString().split(" - ");
+        int sTime=Integer.parseInt(timeRange[0].replaceAll(":00",""));
+        int eTime=Integer.parseInt(timeRange[1].replaceAll(":00",""));
+
+        int rowsToGen=CalculateHours(sTime,eTime);
+        List<String> rowsTimeValue=MakeTimeList(rowsToGen,sTime,eTime);
+        GenerateTable(curView,rowsTimeValue,0,6,patientIntake);
+        GenerateTable(curView,rowsTimeValue,0,6,patientTime);
+
     }
 
     private void CalculateAge()
@@ -829,11 +882,11 @@ public class HomeFragment extends Fragment  {
         }
         int rowsToGen=CalculateHours(sTime,eTime);
         List<String> rowsTimeValue=MakeTimeList(rowsToGen,sTime,eTime);
-        GenerateTable(view,rowsTimeValue,0,6);
-        GenerateTable(view,rowsTimeValue,1,6);
+        GenerateTable(view,rowsTimeValue,0,6,null);
+        GenerateTable(view,rowsTimeValue,1,6,null);
     }
 
-    private void GenerateTable(View view,List<String>rowsTimeValue,int tablecount,int columnCount)
+    private void GenerateTable(View view,List<String>rowsTimeValue,int tablecount,int columnCount,List<Object>tblValues)
     {
         CheckIfRows(tablecount);
         ShapeDrawable sd = new ShapeDrawable();
@@ -845,6 +898,10 @@ public class HomeFragment extends Fragment  {
         TableRow[] rws=new TableRow[SizeWithHeading];
         TextView[] textView=new TextView[SizeWithHeading];
         EditText[] editTxt=new EditText[5];
+        int existDataSize=0;
+        if(tblValues!=null) {
+            existDataSize = tblValues.size();
+        }
 
         for (int i=0;i<SizeWithHeading;i++)
         {
@@ -870,7 +927,6 @@ public class HomeFragment extends Fragment  {
                 }
                 else
                 {
-
                     headTxt[1].setText(getResources().getString(R.string.urineInTblHead));
                     headTxt[2].setText(getResources().getString(R.string.urineOutTblHead));
                     headTxt[3].setText(getResources().getString(R.string.stoolInTblHead));
@@ -883,7 +939,6 @@ public class HomeFragment extends Fragment  {
                     rws[i].setGravity(Gravity.CENTER);
                     rws[i].addView(headTxt[h]);
                 }
-                //rws[i].setWeightSum(6);
                 switch ( tablecount)
                 {
                     case 0:
@@ -919,6 +974,10 @@ public class HomeFragment extends Fragment  {
                     editTxt[c].setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editTxt[c].setHeight(150);
                     editTxt[c].setWidth(215);
+                    if(existDataSize>0)
+                    {
+                        editTxt[c].setText("");
+                    }
                     editTxt[c].setGravity(Gravity.CENTER);
                     if(c==1||c==3)
                         editTxt[c].setBackground(inputSd);
@@ -940,7 +999,6 @@ public class HomeFragment extends Fragment  {
                         break;
                     }
                 }
-
             }
         }
         genTimeBtn.setText("RECREATE TABLE");
@@ -1075,7 +1133,7 @@ public class HomeFragment extends Fragment  {
     }
     private void TestData()
     {
-        DatabaseHelper helper= new DatabaseHelper(curView.getContext());
+        /*DatabaseHelper helper= new DatabaseHelper(curView.getContext());
         helper.CreateSQLHelpers(curView.getContext());
         String[] searchIdList= new String[5];
         searchIdList[0]="Marcell";
@@ -1085,6 +1143,7 @@ public class HomeFragment extends Fragment  {
         String IdForUpdate=helper.GetPatientId(searchIdList,false);
         List<Object> items=helper.GetByPatientId(1);
         String Name= String.valueOf(items.get(1));
+        String LastName = String.valueOf(items.get(2));*/
     }
     private void UpdateData()
     {

@@ -28,6 +28,8 @@
     <string name="dietTxt">Diet</string>
     <string name="ccTxt">CC : </string>
     <string name="tableGenBtn">Create Table</string>
+    <string name="searchBtn">Search</string>
+    <string name="returnDetailsBtn">Okay</string>
     <string name="urineIntakeTxt">Urine Intake</string>
     <string name="urineOuttakeTxt">Urine Output</string>
     <string name="stoolIntakeTxt">Stool Intake</string>
@@ -101,4 +103,6 @@
     <string name="radioGroupHead">Select the relative:</string>
     <string name="nav_barSubHead">Welcome back!</string>
     <string name="dateNowTxt">Today\'s Date</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

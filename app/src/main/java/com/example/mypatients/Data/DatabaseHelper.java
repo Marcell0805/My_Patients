@@ -248,7 +248,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
     public List<Object> GetByPatientId(int PatientId)
     {
-
         String[] columns={Patient.Column_patientId,
                 Patient.Column_patientName,
                 Patient.Column_patientSurname,
@@ -270,15 +269,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
             if (!cursor.moveToFirst()) {
                 return new ArrayList<>();
             }
-
-            /*while(cursor.moveToNext())
-            {
-                final int id = cursor.getInt(idIndex);
-                final String  pName = cursor.getString(nameIndex);
-                final String  pSname = cursor.getString(surnameIndex);
-                final int pAge = cursor.getInt(ageIndex);
-                final int roomNumber = cursor.getInt(roomIndex);
-            }*/
             do {
                 int id = cursor.getInt(idIndex);
                 String  pName = cursor.getString(nameIndex);
@@ -300,7 +290,168 @@ public class DatabaseHelper extends SQLiteOpenHelper
         }
         return  patientList;
     }
-    public void GetAllPatients()
+    public List<Object> GetPatientIntake(int PatientId)
+    {
+        String[] columns={PatientIntake.Column_patientId,
+                PatientIntake.Column_milkIn,
+                PatientIntake.Column_stoolInput,
+                PatientIntake.Column_timePeriod,
+                PatientIntake.Column_urineInput,
+                PatientIntake.Column_urineOutput,
+                PatientIntake.Column_waterIn};
+
+        String where =PatientIntake.Column_patientId + "=?";
+        String[] selectionArgs=new String[]{String.valueOf(PatientId)};
+        final List<Object> patientList= new ArrayList<>();
+        try
+        {
+            Cursor cursor= db.query(PatientIntake.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            final int milkIndex = cursor.getColumnIndex(PatientIntake.Column_milkIn);
+            final int stoolIndex = cursor.getColumnIndex(PatientIntake.Column_stoolInput);
+            final int timeIndex = cursor.getColumnIndex(PatientIntake.Column_timePeriod);
+            final int urineInIndex = cursor.getColumnIndex(PatientIntake.Column_urineInput);
+            final int urineOutIndex = cursor.getColumnIndex(PatientIntake.Column_urineOutput);
+            final int waterIndex = cursor.getColumnIndex(PatientIntake.Column_waterIn);
+
+            if (!cursor.moveToFirst()) {
+                return new ArrayList<>();
+            }
+            do {
+                String milk = cursor.getString(milkIndex);
+                String  stool = cursor.getString(stoolIndex);
+                String  time = cursor.getString(timeIndex);
+                String  urineIn = cursor.getString(urineInIndex);
+                String  urineOut = cursor.getString(urineOutIndex);
+                String  water = cursor.getString(waterIndex);
+
+                patientList.add(urineIn);
+                patientList.add(urineOut);
+                patientList.add(stool);
+                patientList.add(water);
+                patientList.add(milk);
+                patientList.add(time);
+
+            }while(cursor.moveToNext());
+
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return  patientList;
+    }
+
+    public List<Object> GetPatientTime(int PatientId)
+    {
+        String[] columns={PatientTime.Column_patientId,
+                PatientTime.Column_bloodPressure,
+                PatientTime.Column_ivf,
+                PatientTime.Column_oxygen,
+                PatientTime.Column_temperature,
+                PatientTime.Column_timePeriod,
+                PatientTime.Column_pulseRate};
+
+        String where =PatientTime.Column_patientId + "=?";
+        String[] selectionArgs=new String[]{String.valueOf(PatientId)};
+        final List<Object> patientList= new ArrayList<>();
+        try
+        {
+            Cursor cursor= db.query(PatientTime.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            final int bloodPressureIndex = cursor.getColumnIndex(PatientTime.Column_bloodPressure);
+            final int ivfIndex = cursor.getColumnIndex(PatientTime.Column_ivf);
+            final int oxIndex = cursor.getColumnIndex(PatientTime.Column_oxygen);
+            final int tempIndex = cursor.getColumnIndex(PatientTime.Column_temperature);
+            final int timeIndex = cursor.getColumnIndex(PatientTime.Column_timePeriod);
+            final int pulseIndex = cursor.getColumnIndex(PatientTime.Column_pulseRate);
+
+            if (!cursor.moveToFirst()) {
+                return new ArrayList<>();
+            }
+            do {
+                String blood = cursor.getString(bloodPressureIndex);
+                String  ivf = cursor.getString(ivfIndex);
+                String  ox = cursor.getString(oxIndex);
+                int temp = cursor.getInt(tempIndex);
+                String time = cursor.getString(timeIndex);
+                String pulse = cursor.getString(pulseIndex);
+                patientList.add(pulse);
+                patientList.add(temp);
+                patientList.add(blood);
+                patientList.add(ivf);
+                patientList.add(ox);
+                patientList.add(time);
+
+
+            }while(cursor.moveToNext());
+
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return  patientList;
+    }
+
+
+
+
+
+
+
+
+    public List<Object> GetByPatientDetails(String[] searchValues)
+    {
+        String[] columns={Patient.Column_patientId,
+                Patient.Column_patientName,
+                Patient.Column_patientSurname,
+                Patient.Column_age,
+                Patient.Column_roomNum};
+
+        String where =Patient.Column_patientName + " LIKE ?"+ " and " +
+                Patient.Column_patientSurname+ " LIKE ?"+ " and " +
+                Patient.Column_age+ " LIKE ?" + " and " +
+                Patient.Column_roomNum+ " LIKE ?";
+
+        String[] selectionArgs=new String[]{"%"+searchValues[0]+"%","%"+searchValues[1]+"%","%"+searchValues[2]+"%","%"+searchValues[3]+"%"};
+        final List<Object> patientList= new ArrayList<>();
+
+        try
+        {
+            Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            final int idIndex = cursor.getColumnIndex(Patient.Column_patientId);
+            final int nameIndex = cursor.getColumnIndex(Patient.Column_patientName);
+            final int surnameIndex = cursor.getColumnIndex(Patient.Column_patientSurname);
+            final int ageIndex = cursor.getColumnIndex(Patient.Column_age);
+            final int roomIndex = cursor.getColumnIndex(Patient.Column_roomNum);
+
+            if (!cursor.moveToFirst()) {
+                return new ArrayList<>();
+            }
+            /*String lista[]=new String[cursor.getCount()];
+            int index=0;*/
+            do {
+                int id = cursor.getInt(idIndex);
+                String  pName = cursor.getString(nameIndex);
+                String  pSname = cursor.getString(surnameIndex);
+                int pAge = cursor.getInt(ageIndex);
+                int roomNumber = cursor.getInt(roomIndex);
+                //lista[index]= id+","+pName+","+pSname+","+pAge+","+roomNumber;
+                patientList.add(id);
+                patientList.add(pName);
+                patientList.add(pSname);
+                patientList.add(pAge);
+                patientList.add(roomNumber);
+                //index++;
+            }while(cursor.moveToNext());
+
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return  patientList;
+    }
+    /*public void GetAllPatients()
     {
         String[] columns={Patient.Column_patientId,
                 Patient.Column_patientName,
@@ -324,5 +475,5 @@ public class DatabaseHelper extends SQLiteOpenHelper
             String a= String.valueOf(e);
         }
         //return "";
-    }
+    }*/
 }
