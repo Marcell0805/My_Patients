@@ -14,6 +14,7 @@ import com.example.mypatients.Data.MyPatients.PatientTime;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper
@@ -137,27 +138,66 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public void CreatePatientTime(String[] values)
     {
         ContentValues value= new ContentValues();
-        value.put(PatientTime.Column_timePeriod,values[0]);
-        value.put(PatientTime.Column_pulseRate ,values[1]);
-        value.put(PatientTime.Column_temperature,values[2]);
-        value.put(PatientTime.Column_bloodPressure ,values[3]);
-        value.put(PatientTime.Column_ivf ,values[4]);
-        value.put(PatientTime.Column_oxygen,values[5]);
-        value.put(PatientTime.Column_patientId,values[6]);
+        int rowsToSave=values.length/6;
+        int timeIndex=0;
+        int pulseIndex=1;
+        int tempIndex=2;
+        int bloodIndex=3;
+        int ivfIndex=4;
+        int oxIndex=5;
+        int patIndex=values.length-1;
+        for(int i=0;i<rowsToSave;i++)
+        {
+            value.put(PatientTime.Column_timePeriod,values[timeIndex]);
+            value.put(PatientTime.Column_pulseRate ,values[pulseIndex]);
+            value.put(PatientTime.Column_temperature,values[tempIndex]);
+            value.put(PatientTime.Column_bloodPressure ,values[bloodIndex]);
+            value.put(PatientTime.Column_ivf ,values[ivfIndex]);
+            value.put(PatientTime.Column_oxygen,values[oxIndex]);
+            value.put(PatientTime.Column_patientId,values[patIndex]);
+            if(i+1==rowsToSave)
+                break;
+            db.insert(PatientTime.TABLE_NAME,null,value);
+            timeIndex=timeIndex+6;
+            pulseIndex=pulseIndex+6;
+            tempIndex=tempIndex+6;
+            bloodIndex=bloodIndex+6;
+            ivfIndex=ivfIndex+6;
+            oxIndex=oxIndex+6;
+        }
 
         long timeTbl_id=db.insert(PatientTime.TABLE_NAME,null,value);
     }
     public void CreatePatientIntake(String[] values)
     {
         ContentValues value= new ContentValues();
-        value.put(PatientIntake.Column_timePeriod,values[0]);
-        value.put(PatientIntake.Column_urineInput ,values[1]);
-        value.put(PatientIntake.Column_urineOutput,values[2]);
-        value.put(PatientIntake.Column_stoolInput,values[3]);
-        value.put(PatientIntake.Column_waterIn,values[4]);
-        value.put(PatientIntake.Column_milkIn ,values[5]);
-        value.put(PatientIntake.Column_patientId,values[6]);
-
+        int rowsToSave=values.length/6;
+        int timeIndex=0;
+        int urineIndex=1;
+        int urineOutIndex=2;
+        int stoolIndex=3;
+        int waterIndex=4;
+        int milkIndex=5;
+        int patIndex=values.length-1;
+        for(int i=0;i<rowsToSave;i++)
+        {
+            value.put(PatientIntake.Column_timePeriod, values[timeIndex]);
+            value.put(PatientIntake.Column_urineInput, values[urineIndex]);
+            value.put(PatientIntake.Column_urineOutput, values[urineOutIndex]);
+            value.put(PatientIntake.Column_stoolInput, values[stoolIndex]);
+            value.put(PatientIntake.Column_waterIn, values[waterIndex]);
+            value.put(PatientIntake.Column_milkIn, values[milkIndex]);
+            value.put(PatientTime.Column_patientId,values[patIndex]);
+            if(i+1==rowsToSave)
+                break;
+            db.insert(PatientIntake.TABLE_NAME,null,value);
+            timeIndex=timeIndex+6;
+            urineIndex=urineIndex+6;
+            urineOutIndex=urineOutIndex+6;
+            stoolIndex=stoolIndex+6;
+            waterIndex=waterIndex+6;
+            milkIndex=milkIndex+6;
+        }
         long patient_id=db.insert(PatientIntake.TABLE_NAME,null,value);
     }
     //Update Section
@@ -191,12 +231,33 @@ public class DatabaseHelper extends SQLiteOpenHelper
     {
         String[] args ={idToUpdate};
         ContentValues value= new ContentValues();
-        value.put(PatientTime.Column_timePeriod,values[0]);
-        value.put(PatientTime.Column_pulseRate ,values[1]);
-        value.put(PatientTime.Column_temperature,values[2]);
-        value.put(PatientTime.Column_bloodPressure ,values[3]);
-        value.put(PatientTime.Column_ivf ,values[4]);
-        value.put(PatientTime.Column_oxygen,values[5]);
+        int rowsToSave=values.length/6;
+        int timeIndex=0;
+        int pulseIndex=1;
+        int tempIndex=2;
+        int bloodIndex=3;
+        int ivfIndex=4;
+        int oxIndex=5;
+        int patIndex=values.length-1;
+        for(int i=0;i<rowsToSave;i++)
+        {
+            value.put(PatientTime.Column_timePeriod,values[timeIndex]);
+            value.put(PatientTime.Column_pulseRate ,values[pulseIndex]);
+            value.put(PatientTime.Column_temperature,values[tempIndex]);
+            value.put(PatientTime.Column_bloodPressure ,values[bloodIndex]);
+            value.put(PatientTime.Column_ivf ,values[ivfIndex]);
+            value.put(PatientTime.Column_oxygen,values[oxIndex]);
+            value.put(PatientTime.Column_patientId,values[patIndex]);
+            if(i+1==rowsToSave)
+                break;
+            db.update(PatientTime.TABLE_NAME,value,PatientTime.Column_patientId +" =?",args);
+            timeIndex=timeIndex+6;
+            pulseIndex=pulseIndex+6;
+            tempIndex=tempIndex+6;
+            bloodIndex=bloodIndex+6;
+            ivfIndex=ivfIndex+6;
+            oxIndex=oxIndex+6;
+        }
 
         long timeTbl_id=db.update(PatientTime.TABLE_NAME,value,PatientTime.Column_patientId +" =?",args);
     }
@@ -204,12 +265,34 @@ public class DatabaseHelper extends SQLiteOpenHelper
     {
         String[] args ={idToUpdate};
         ContentValues value= new ContentValues();
-        value.put(PatientIntake.Column_timePeriod,values[0]);
-        value.put(PatientIntake.Column_urineInput ,values[1]);
-        value.put(PatientIntake.Column_urineOutput,values[2]);
-        value.put(PatientIntake.Column_stoolInput,values[3]);
-        value.put(PatientIntake.Column_waterIn,values[4]);
-        value.put(PatientIntake.Column_milkIn ,values[5]);
+        int rowsToSave=values.length/6;
+        int timeIndex=0;
+        int urineIndex=1;
+        int urineOutIndex=2;
+        int stoolIndex=3;
+        int waterIndex=4;
+        int milkIndex=5;
+        int patIndex=values.length-1;
+        for(int i=0;i<rowsToSave;i++)
+        {
+            value.put(PatientIntake.Column_timePeriod, values[0]);
+            value.put(PatientIntake.Column_urineInput, values[1]);
+            value.put(PatientIntake.Column_urineOutput, values[2]);
+            value.put(PatientIntake.Column_stoolInput, values[3]);
+            value.put(PatientIntake.Column_waterIn, values[4]);
+            value.put(PatientIntake.Column_milkIn, values[5]);
+            value.put(PatientIntake.Column_patientId, values[6]);
+            value.put(PatientTime.Column_patientId,values[patIndex]);
+            if(i+1==rowsToSave)
+                break;
+            db.update(PatientIntake.TABLE_NAME,value,PatientIntake.Column_patientId +" =?",args);
+            timeIndex=timeIndex+6;
+            urineIndex=urineIndex+6;
+            urineOutIndex=urineOutIndex+6;
+            stoolIndex=stoolIndex+6;
+            waterIndex=waterIndex+6;
+            milkIndex=milkIndex+6;
+        }
 
         long timeTbl_id=db.update(PatientIntake.TABLE_NAME,value,PatientIntake.Column_patientId +" =?",args);
     }
@@ -252,7 +335,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 Patient.Column_patientName,
                 Patient.Column_patientSurname,
                 Patient.Column_age,
-                Patient.Column_roomNum};
+                Patient.Column_roomNum,
+                Patient.Column_cc,
+                Patient.Column_diet,
+                Patient.Column_doctorName,
+                Patient.Column_doctorSurname,
+                Patient.Column_hasIvf,
+                Patient.Column_hasMedication,
+                Patient.Column_hasNeb,
+                Patient.Column_hasVsq,
+                Patient.Column_ngt,
+                Patient.Column_dateOfBirth,
+                Patient.Column_captureDate
+        };
 
         String where =Patient.Column_patientId + "=?";
         String[] selectionArgs=new String[]{String.valueOf(PatientId)};
@@ -264,7 +359,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
             final int nameIndex = cursor.getColumnIndex(Patient.Column_patientName);
             final int surnameIndex = cursor.getColumnIndex(Patient.Column_patientSurname);
             final int ageIndex = cursor.getColumnIndex(Patient.Column_age);
+            final int dobIndex = cursor.getColumnIndex(Patient.Column_dateOfBirth);
             final int roomIndex = cursor.getColumnIndex(Patient.Column_roomNum);
+            final int ccIndex = cursor.getColumnIndex(Patient.Column_cc);
+            final int dietIndex = cursor.getColumnIndex(Patient.Column_diet);
+            final int docNameIndex = cursor.getColumnIndex(Patient.Column_doctorName);
+            final int docSurnameIndex = cursor.getColumnIndex(Patient.Column_doctorSurname);
+            final int ivfIndex = cursor.getColumnIndex(Patient.Column_hasIvf);
+            final int medicationIndex = cursor.getColumnIndex(Patient.Column_hasMedication);
+            final int nebIndex = cursor.getColumnIndex(Patient.Column_hasNeb);
+            final int vsgIndex = cursor.getColumnIndex(Patient.Column_hasVsq);
+            final int ngtIndex = cursor.getColumnIndex(Patient.Column_ngt);
+            final int dateCaptureIndex = cursor.getColumnIndex(Patient.Column_captureDate);
 
             if (!cursor.moveToFirst()) {
                 return new ArrayList<>();
@@ -274,12 +380,36 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 String  pName = cursor.getString(nameIndex);
                 String  pSname = cursor.getString(surnameIndex);
                 int pAge = cursor.getInt(ageIndex);
-                int roomNumber = cursor.getInt(roomIndex);
+                String cc = cursor.getString(ccIndex);
+                String dob = cursor.getString(dobIndex);
+                String diet = cursor.getString(dietIndex);
+                String roomNumber = cursor.getString(roomIndex);
+                String docName = cursor.getString(docNameIndex);
+                String docSurname = cursor.getString(docSurnameIndex);
+                int ivf = cursor.getInt(ivfIndex);
+                int medication = cursor.getInt(medicationIndex);
+                int neb = cursor.getInt(nebIndex);
+                int vsg = cursor.getInt(vsgIndex);
+                int ngt = cursor.getInt(ngtIndex);
+                String captureDate = cursor.getString(dateCaptureIndex);
                 patientList.add(id);
+                patientList.add(roomNumber);
+                patientList.add(pAge);
+                patientList.add(cc);
+                patientList.add(dob);
+                patientList.add(captureDate);
+                patientList.add(diet);
+                patientList.add(docName);
+                patientList.add(docSurname);
+                patientList.add(ivf);
+                patientList.add(medication);
+                patientList.add(neb);
+                patientList.add(vsg);
+                patientList.add(ngt);
                 patientList.add(pName);
                 patientList.add(pSname);
-                patientList.add(pAge);
-                patientList.add(roomNumber);
+
+
 
             }while(cursor.moveToNext());
 
@@ -324,12 +454,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 String  urineOut = cursor.getString(urineOutIndex);
                 String  water = cursor.getString(waterIndex);
 
+                 patientList.add(time);
                 patientList.add(urineIn);
                 patientList.add(urineOut);
                 patientList.add(stool);
                 patientList.add(water);
                 patientList.add(milk);
-                patientList.add(time);
+
 
             }while(cursor.moveToNext());
 
@@ -374,14 +505,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 int temp = cursor.getInt(tempIndex);
                 String time = cursor.getString(timeIndex);
                 String pulse = cursor.getString(pulseIndex);
+                patientList.add(time);
                 patientList.add(pulse);
                 patientList.add(temp);
                 patientList.add(blood);
                 patientList.add(ivf);
                 patientList.add(ox);
-                patientList.add(time);
-
-
             }while(cursor.moveToNext());
 
         }
@@ -391,14 +520,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
         }
         return  patientList;
     }
-
-
-
-
-
-
-
-
     public List<Object> GetByPatientDetails(String[] searchValues)
     {
         String[] columns={Patient.Column_patientId,
