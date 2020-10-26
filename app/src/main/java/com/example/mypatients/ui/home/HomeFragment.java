@@ -53,14 +53,12 @@ import java.util.List;
 import java.util.Locale;
 /*
     To-Do:
-        The data for the tables aren't saving each column
-        After data fetch populate patient details fields with the data
-
 
  */
 public class HomeFragment extends Fragment
 {
-    public  boolean activeCalled =false;
+    public boolean activeCalled =false;
+    private boolean updateEnabled =false;
     private FragmentHomeBinding binding;
     private Button printbtn,calcIvfBtn,genTimeBtn,saveBtn,addNewBtn,searchBtn;
     private Spinner startTimeSpin,endTimeSpin;
@@ -93,7 +91,7 @@ public class HomeFragment extends Fragment
         printManager = (PrintManager) getActivity()
                 .getSystemService(root.getContext().PRINT_SERVICE);
         SetDefaultValues(root);
-        TestData();
+        //TestData();
         return root;
     }
 
@@ -115,6 +113,7 @@ public class HomeFragment extends Fragment
                     Bundle result= data.getExtras();
                     String a = result.getString("PatientId");
                     setPatientData(a);
+                    id=a;
                 }
             }
             catch (Exception e)
@@ -212,8 +211,8 @@ public class HomeFragment extends Fragment
             //((RadioButton)nebRadioGroup.getChildAt(Integer.parseInt(values.get(12).toString()))).setChecked(true);
         }
         //End of radio buttons
-
-
+        saveBtn.setText("Update");
+        updateEnabled=true;
     }
 
     private void SetListeners(View root)
@@ -1185,28 +1184,46 @@ public class HomeFragment extends Fragment
             Toast.makeText(curView.getContext(),"Please Generate The Tables", Toast.LENGTH_LONG).show();
         else
         {
-
             String[]tableD = setSaveForTblDetails(0);
             String[]tableIn = setSaveForTblDetails(1);
             String[] patientDetails= setSaveDetails();
+            boolean saved=false;
             if(patientDetails!=null)
             {
                 try
                 {
                     DatabaseHelper helper= new DatabaseHelper(curView.getContext());
                     helper.CreateSQLHelpers(curView.getContext());
-                    long idP=helper.CreatePatient(patientDetails);
-                    tableD[tableD.length-1]=String.valueOf(idP);
-                    tableIn[tableD.length-1]=String.valueOf(idP);
-                    helper.CreatePatientTime(tableD);
-                    helper.CreatePatientIntake(tableIn);
+                    if(updateEnabled)
+                    {
+                        helper.UpdatePatient(patientDetails,id);
+                        tableD[tableD.length-1]=String.valueOf(id);
+                        tableIn[tableD.length-1]=String.valueOf(id);
+                        helper.UpdatePatientTime(tableD,id);
+                        helper.UpdatePatientPatientIntake(tableIn,id);
+                        saved=true;
+                    }
+                    else
+                    {
+                        if(helper.PatientExists(patientDetails))
+                        {
+                            long idP=helper.CreatePatient(patientDetails);
+                            tableD[tableD.length-1]=String.valueOf(idP);
+                            tableIn[tableD.length-1]=String.valueOf(idP);
+                            helper.CreatePatientTime(tableD);
+                            helper.CreatePatientIntake(tableIn);
+                        }
+                        else
+                            saved=false;
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     String error= ex.getMessage();
                     Toast.makeText(curView.getContext(),error,Toast.LENGTH_LONG).show();
                 }
-                AfterSave();
+                AfterSave(saved);
             }
             else
                 Toast.makeText(curView.getContext(),"Missing Data", Toast.LENGTH_LONG).show();
@@ -1227,7 +1244,7 @@ public class HomeFragment extends Fragment
         String Name= String.valueOf(items.get(1));
         String LastName = String.valueOf(items.get(2));*/
     }
-    private void UpdateData()
+    /*private void UpdateData()
     {
         if(timeGrid.getChildCount()==0)
             Toast.makeText(curView.getContext(),"Please Generate The Tables", Toast.LENGTH_LONG).show();
@@ -1270,8 +1287,18 @@ public class HomeFragment extends Fragment
 
     }
 
-    private void AfterSave() {
-        Toast.makeText(curView.getContext(),"The patient details have been saved", Toast.LENGTH_LONG).show();
-        saveBtn.setText("Update");
+     */
+
+    private void AfterSave(boolean saved) {
+        if(saved)
+        {
+            Toast.makeText(curView.getContext(),"The patient details have been saved", Toast.LENGTH_LONG).show();
+            updateEnabled=true;
+            saveBtn.setText("Update");
+        }
+        else
+        {
+            Toast.makeText(curView.getContext(),"The patient already exists, can't insert.", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -572,6 +572,39 @@ public class DatabaseHelper extends SQLiteOpenHelper
         }
         return  patientList;
     }
+
+    public boolean PatientExists(String[] searchValues)
+    {
+        String[] columns={Patient.Column_patientId,
+                Patient.Column_patientName,
+                Patient.Column_patientSurname,
+                Patient.Column_age,
+                Patient.Column_roomNum};
+
+        String where =Patient.Column_patientName + " LIKE ?"+ " and " +
+                Patient.Column_patientSurname+ " LIKE ?"+ " and " +
+                Patient.Column_age+ " LIKE ?" + " and " +
+                Patient.Column_roomNum+ " LIKE ?";
+
+        String[] selectionArgs=new String[]{"%"+searchValues[0]+"%","%"+searchValues[1]+"%","%"+searchValues[2]+"%","%"+searchValues[3]+"%"};
+        final List<Object> patientList= new ArrayList<>();
+
+        try
+        {
+            Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
+            if (cursor.moveToFirst()) {
+                return true;
+            }
+            else
+                return false;
+
+        }
+        catch (Exception e)
+        {
+            String a= String.valueOf(e);
+        }
+        return  false;
+    }
     /*public void GetAllPatients()
     {
         String[] columns={Patient.Column_patientId,
