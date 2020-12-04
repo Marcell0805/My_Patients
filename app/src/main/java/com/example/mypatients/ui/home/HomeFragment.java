@@ -461,11 +461,20 @@ public class HomeFragment extends Fragment
     private void CalculateAge()
     {
         String sDateOfBirth=dateOfBirthTxt.getText().toString();
+        sDateOfBirth=sDateOfBirth.replace("/","");
+        String year=sDateOfBirth.substring(0,4);
+        String day=sDateOfBirth.substring(6,8);
         Date parsed= new Date();
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format =
                 new SimpleDateFormat("yyyy/MM/dd");
+        int yearParsed=0;
+        int dayParsed=0;
         try {
+
+            yearParsed=Integer.parseInt(year.replace("Y",""));
+            if(day.replace("D","")!="")
+                dayParsed=Integer.parseInt(day.replace("D",""));
             parsed = format.parse(sDateOfBirth);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -474,22 +483,21 @@ public class HomeFragment extends Fragment
         calendar[0]=new GregorianCalendar();
         calendar[1]=new GregorianCalendar();
         calendar[0].setTime(parsed);
-        int yearEntered = calendar[0].get(Calendar.YEAR);
+        calendar[0].setTime(parsed);
+        int yearEntered = calendar[0].get(calendar[0].YEAR);
         calendar[1].setTime(currentTime);
         int yearNow=calendar[1].get(Calendar.YEAR);
-        int iAge= yearNow-yearEntered;
-        Boolean isMonthAfter=calendar[1].get(Calendar.MONTH)>=calendar[0].get(Calendar.MONTH);
-        Boolean isDayAft=calendar[1].get(Calendar.DAY_OF_MONTH)>=calendar[0].get(Calendar.DAY_OF_MONTH);
-        if(isMonthAfter&&iAge!=0)
+        int dayNow=calendar[1].get(Calendar.DAY_OF_MONTH);
+        //int iAge= yearNow-yearEntered;
+        int iAge= yearNow-yearParsed;
+        Boolean isMonthAfter=calendar[1].get(Calendar.MONTH)>=calendar[0].get(calendar[0].MONTH);
+        Boolean isDayAft=dayNow>=dayParsed;
+        if(isMonthAfter)
         {
             if(!isDayAft)
-                iAge--;
+                 iAge--;
         }
-        else if(iAge!=0)
-        {
-            iAge--;
-        }
-        if(iAge!=0)
+        if(iAge!=0&&dayParsed!=0)
         {
             ageTxt.setText(String.valueOf(iAge));
         }
