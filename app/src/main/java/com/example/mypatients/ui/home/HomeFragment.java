@@ -462,8 +462,23 @@ public class HomeFragment extends Fragment
     {
         String sDateOfBirth=dateOfBirthTxt.getText().toString();
         sDateOfBirth=sDateOfBirth.replace("/","");
+        if(sDateOfBirth.contains("D")||sDateOfBirth.contains("d")||sDateOfBirth.contains("Y")||sDateOfBirth.contains("y")||sDateOfBirth.contains("M")||sDateOfBirth.contains("m"))
+        {
+            ageTxt.setText("");
+            return;
+        }
+        //19960805
         String year=sDateOfBirth.substring(0,4);
         String day=sDateOfBirth.substring(6,8);
+        if(day.contains("d")||day.contains("D"))
+        {
+            day="00";
+        }
+        String month=sDateOfBirth.substring(4,6);
+        if(month.contains("M"))
+        {
+            month="00";
+        }
         Date parsed= new Date();
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format =
@@ -480,6 +495,7 @@ public class HomeFragment extends Fragment
             e.printStackTrace();
         }
         Calendar[] calendar = new Calendar[2];
+        Calendar cal=Calendar.getInstance();
         calendar[0]=new GregorianCalendar();
         calendar[1]=new GregorianCalendar();
         calendar[0].setTime(parsed);
@@ -488,14 +504,26 @@ public class HomeFragment extends Fragment
         calendar[1].setTime(currentTime);
         int yearNow=calendar[1].get(Calendar.YEAR);
         int dayNow=calendar[1].get(Calendar.DAY_OF_MONTH);
+        //int monthNow=calendar[1].get(Calendar.MONTH);//
+        int monthNow=cal.get(Calendar.MONTH)+1;
+
         //int iAge= yearNow-yearEntered;
         int iAge= yearNow-yearParsed;
-        Boolean isMonthAfter=calendar[1].get(Calendar.MONTH)>=calendar[0].get(calendar[0].MONTH);
-        Boolean isDayAft=dayNow>=dayParsed;
+        Boolean isMonthAfter=monthNow<=Integer.parseInt(month);
+        Boolean isDayAft=dayNow<=Integer.parseInt(day);
         if(isMonthAfter)
         {
-            if(!isDayAft)
-                 iAge--;
+            if(monthNow==Integer.parseInt(month))
+            {
+                if(isDayAft)
+                {
+                    if(dayNow<Integer.parseInt(day))
+                        iAge--;
+                }
+            }
+            else if(monthNow<Integer.parseInt(month))
+                iAge--;
+
         }
         if(iAge!=0&&dayParsed!=0)
         {
