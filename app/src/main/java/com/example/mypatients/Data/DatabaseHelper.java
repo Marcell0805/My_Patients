@@ -227,6 +227,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         long timeTbl_id=db.update(Patient.TABLE_NAME,value,Patient.Column_patientId +" =?",args);
     }
+
+    //Have to check the regeneration for the tables so if the table size is bigger it has to do an insert not an update
+    //Since it is busy overiding the last values over and over again
+
+
     public void UpdatePatientTime(String[] values,String idToUpdate)
     {
         String[] args ={idToUpdate};
@@ -592,11 +597,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         try
         {
             Cursor cursor= db.query(Patient.TABLE_NAME,columns,where,selectionArgs,null,null,null);
-            if (cursor.moveToFirst()) {
-                return true;
-            }
-            else
-                return false;
+            return cursor.moveToFirst();
 
         }
         catch (Exception e)

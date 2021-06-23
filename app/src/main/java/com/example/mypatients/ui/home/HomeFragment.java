@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment
         /*
         If Testing Uncomment below method
          */
-        //setTestValues();
+        setTestValues();
         DatabaseHelper helper= new DatabaseHelper(root.getContext());
         helper.CreateSQLHelpers(root.getContext());
         //SQLiteDatabase db= helper.getReadableDatabase();
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment
         super.onPause();
         activeCalled=true;
     }
-
+    //This is to prepopulate test values for testing
     private void setTestValues()
     {
         dateOfBirthTxt.setText("1996/08/05");
@@ -148,6 +148,7 @@ public class HomeFragment extends Fragment
         ccTxt.setText("12");
         ngtTxt.setText("30");
     }
+    //This sets the patient details from the find method
     private void setRetrievedValues(List<Object>values)
     {
         roomTxt.setText(values.get(1).toString());
@@ -214,7 +215,7 @@ public class HomeFragment extends Fragment
         saveBtn.setText("Update");
         updateEnabled=true;
     }
-
+    //Starts the event listeners
     private void SetListeners(View root)
     {
         startTimeSpin=root.findViewById(R.id.startTime);
@@ -437,6 +438,7 @@ public class HomeFragment extends Fragment
         Intent patientSearch= new Intent(getActivity(), PatientSearch.class);
         startActivityForResult(patientSearch,999);
     }
+    //This is when the data comes back from the search screen
     public void setPatientData(String id)
     {
         int aId=Integer.parseInt(id);
@@ -851,7 +853,7 @@ public class HomeFragment extends Fragment
         boolean isDate=true;
         try
         {
-            SimpleDateFormat dateFormat= new SimpleDateFormat("YYYY/MM/DD");
+            SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy/MM/dd");
             Date ofBirth=dateFormat.parse(dobString);
 
         }
@@ -1207,8 +1209,7 @@ public class HomeFragment extends Fragment
 
     private int CalculateHours(int sTime, int eTime)
     {
-        int rows=(eTime-sTime);
-        return rows;
+        return (eTime-sTime);
     }
     //---------------------------------------------------------------------------------------------------------------------
     // DATABASE METHODS
@@ -1241,13 +1242,15 @@ public class HomeFragment extends Fragment
                     }
                     else
                     {
-                        if(helper.PatientExists(patientDetails))
+                        boolean a =helper.PatientExists(patientDetails);
+                        if(!helper.PatientExists(patientDetails))
                         {
                             long idP=helper.CreatePatient(patientDetails);
                             tableD[tableD.length-1]=String.valueOf(idP);
                             tableIn[tableD.length-1]=String.valueOf(idP);
                             helper.CreatePatientTime(tableD);
                             helper.CreatePatientIntake(tableIn);
+                            saved=true;
                         }
                         else
                             saved=false;
